@@ -1,55 +1,87 @@
-const express = require('express');
-const router = express.Router();
+const router = require("express").Router();
 
-const User = require('../models/User');
-const Student = require('../models/Student');
-const Teacher = require('../models/Teacher');
+const {
+  getAll,
+  getById,
+  create,
+  update,
+  deleteById,
+  deleteAll,
+} = require("../../models/admin.model");
 
-// Ruta para obtener el listado de alumnos
-router.get('/alumnos', async (req, res) => {
+/** GET all admins */
+router.get("/", async (req, res) => {
+  //res.json("Obteniendo todos los administradores");
   try {
-    const alumnos = await User.find({ role_id: 1 }).populate('student');
-    res.status(200).json({ alumnos });
+    const [admins] = await getAll();
+    res.json(admins[0]);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ fatal: error.message });
   }
 });
 
-// Ruta para dar de baja a un alumno
-router.put('/alumnos/:id/baja', async (req, res) => {
+/** GET admin BY ID */
+router.get("/:adminId", async (req, res) => {
+  //res.json("Obteniendo un admin por su id");
+  const { adminId } = req.params;
   try {
-    const { id } = req.params;
-
-    // Dar de baja al alumno en la base de datos
-    await User.findByIdAndUpdate(id, { $set: { active: false } });
-
-    res.status(200).json({ message: 'Alumno dado de baja exitosamente' });
+    const [admin] = await getById(adminId);
+    if (admin.length === 0) {
+      return res.json({
+        fatal: "No existe el administrador con cuyo ID es " + adminId,
+      });
+    }
+    res.json(admin[0]);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ fatal: error.message });
   }
 });
 
-// Ruta para obtener el listado de profesores
-router.get('/profesores', async (req, res) => {
+/** CREATE an admin */
+router.post("/", async (req, res) => {
+  //res.json("Creando un nuevo admin");
   try {
-    const profesores = await User.find({ role_id: 2 }).populate('teacher');
-    res.status(200).json({ profesores });
+    const [result] = await create(req.body);
+    //res.json(result.insertId);
+    const [newAdmin] = await getById(result.insertId);
+    res.json(newAdmin[0]);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ fatal: error.message });
   }
 });
 
-// Ruta para validar a un profesor
-router.put('/profesores/:id/validar', async (req, res) => {
+/** UPDATE an admin */
+router.put("/:adminId", async (req, res) => {
+  //res.json("actualizando un admin");
+  const { adminId } = req.params;
   try {
-    const { id } = req.params;
-
-    // Validar al profesor en la base de datos
-    await Teacher.findByIdAndUpdate(id, { $set: { is_approved: true } });
-
-    res.status(200).json({ message: 'Profesor validado exitosamente' });
+    await update(adminId, req.body);
+    const [admin] = await getById(adminId);
+    res.json(admin[0]);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+router.delete("/:adminId", async (req, res) => {
+  //res.json("Eliminando un admin");
+  const { adminId } = req.params;
+  try {
+    const [admin] = await getById(adminId);
+    await deleteById(adminId);
+    res.json(admin[0]);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+router.delete("/", async (req, res) => {
+  //res.json("Eliminando todos los admins");
+  try {
+    await deleteAll();
+    res.json({ message: "No hay usuarios administradores" });
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
   }
 });
 
