@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     const [users] = await getAllUser();
     res.json(users);
   } catch (error) {
-    res.status(500).jsin({ fatal: message.error });
+    res.status(500).json({ fatal: message.error });
   }
 });
 
