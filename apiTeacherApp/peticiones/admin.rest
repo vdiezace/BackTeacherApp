@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 #####
-PUT {{host}}/api/admin/71
+PUT {{host}}/api/admin/95
 Content-Type: application/json
 
 {
