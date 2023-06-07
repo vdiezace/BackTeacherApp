@@ -1,4 +1,4 @@
-/** Sentencia por el que se obtiene toda la información de los estudiantes
+/** QUERIE por el que se obtiene toda la información de los estudiantes
  * incluyendo su nombre, apellidos, email, contraseña, rol, fecha de creacion y de actualizacion
  * localizacion: latitud, longitud, provincia, ciudad y calle */
 const getAll = () => {
@@ -7,7 +7,7 @@ const getAll = () => {
   );
 };
 
-/** Sentencia por el que se obtiene toda la información de un único estudiante
+/** QUERIE por el que se obtiene toda la información de un único estudiante
  * incluyendo su nombre, apellidos, email, contraseña, rol, fecha de creacion y de actualizacion
  * localizacion: latitud, longitud, provincia, ciudad y calle */
 const getById = (studentId) => {
