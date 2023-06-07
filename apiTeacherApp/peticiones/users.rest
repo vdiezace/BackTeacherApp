@@ -3,6 +3,33 @@
 #### USERS #######
 GET {{host}}/users
 
+##### admin Log in
+POST {{host}}/users/login
+Content-Type: application/json
+
+{
+    "email": "alba@gmail.com",
+    "password": "12345678"
+}
+
+##### Student Log in
+POST {{host}}/users/login
+Content-Type: application/json
+
+{
+    "email": "jose@gmail.com",
+    "password": "12345678"
+}
+
+##### Teacher Log in
+POST {{host}}/users/login
+Content-Type: application/json
+
+{
+    "email": "luis@outlook.com",
+    "password": "23Luis1"
+}
+
 ###### API USERS ########
 GET {{host}}/api/users
 
