@@ -1,0 +1,7 @@
+@host=http://localhost:3000
+
+#### GET all students
+GET {{host}}/api/students
+
+### GET By Id
+GET {{host}}/api/students/13
