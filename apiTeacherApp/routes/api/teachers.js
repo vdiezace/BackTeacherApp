@@ -1,43 +1,205 @@
 const router = require("express").Router();
+const dayjs = require("dayjs");
 
-// Ruta para obtener el perfil del profesor
-router.get("/perfil", async (req, res) => {
+const {
+  createLocation,
+  updateLocation,
+} = require("../../models/location.model");
+const {
+  getAll,
+  getById,
+  getTeacherClassHours,
+  getTeacherByFilter,
+  createTeacher,
+  getTeacher,
+  updateTeacher,
+  validateTeacher,
+  unvalidatedTeacher,
+} = require("../../models/teacher.model");
+const {
+  createUser,
+  updateUser,
+  deleteUser,
+} = require("../../models/user.model");
+
+/** GET all teachers */
+router.get("/", async (req, res) => {
+  //res.json("obteniendo todos los profesores");
   try {
-    const { user_id } = req.user; // Obtener el ID del usuario autenticado
-
-    // Obtener el profesor según el ID de usuario
-    const teacher = await Teacher.findOne({ user_id }).populate("user");
-
-    if (!teacher) {
-      return res.status(404).json({ error: "Profesor no encontrado" });
-    }
-
-    res.status(200).json({ teacher });
+    const [teachers] = await getAll();
+    res.json(teachers);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ fatal: error.message });
   }
 });
 
-// Ruta para obtener los datos de los alumnos inscritos con el profesor
-router.get("/alumnos", async (req, res) => {
+/** GET a teacher by ID */
+//TODO: add average rating
+router.get("/:teacherId", async (req, res) => {
+  //res.json("Obteniendo un teacher by ID");
+  const { teacherId } = req.params;
   try {
-    const { user_id } = req.user; // Obtener el ID del usuario autenticado
+    const [teacher] = await getById(teacherId);
+    if (teacher.length === 0) {
+      return res.json({
+        fatal: "No existe el profesor con ID = " + teacherId,
+      });
+    }
+    res.json(teacher[0]);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
 
-    // Obtener el profesor según el ID de usuario
-    const teacher = await Teacher.findOne({ user_id });
+/** GET teacher class hours */
+router.get("/hours/:teacherId", async (req, res) => {
+  //res.json("Devuelve las horas de un profesor");
+  const { teacherId } = req.params;
+  try {
+    const [teacherClassHours] = await getTeacherClassHours(teacherId);
+    if (teacher.length === 0) {
+      return res.json({
+        fatal: "No existe el profesor con ID = " + teacherId,
+      });
+    }
+    res.json(teacherClassHours[0]);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
 
-    if (!teacher) {
-      return res.status(404).json({ error: "Profesor no encontrado" });
+/** GET teachers by Filters */
+router.get("/filters/:filterId", async (req, res) => {
+  //res.json("Aplicando filtros a los profesores");
+  const { filterId } = req.params;
+  const arrFilter = [
+    "order by price_hour asc, experience desc",
+    "order by category_id, price_hour asc, experience desc",
+    "order by teacher_id",
+  ];
+  try {
+    const filter = arrFilter[parseInt(filterId) - 1];
+    if (!filter) {
+      return res.json({ fatal: "No existe el filtro " + filterId });
+    }
+    const [teacherFiltered] = await getTeacherByFilter(filter);
+    res.json(teacherFiltered[0]);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+/** CREATE a new teacher */
+router.post("/", async (req, res) => {
+  //res.json("Creando un nuevo profesor");
+  try {
+    /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
+    const [newUser] = await createUser(req.body);
+    req.body.user_id = newUser.insertId;
+
+    const [newLocation] = await createLocation(req.body);
+    req.body.locations_id = newLocation.insertId;
+
+    /** Creamos un nuevo estudiante y lo insertamos*/
+    const [resultTeacher] = await createTeacher(req.body);
+    const [newTeacher] = await getById(resultTeacher.insertId);
+    res.json(newTeacher[0]);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+/** UPDATE new teacher */
+router.put("/:teacherId", async (req, res) => {
+  //res.json("Actualizando un profesor");
+  const { teacherId } = req.params;
+  try {
+    /** Obtenemos los datos del profe */
+    const [teacher] = await getTeacher(teacherId);
+
+    /** recogemos el id de la localizacion y del usuario */
+    req.body.user_id = teacher[0].user_id;
+    //res.json(req.body.user_id);
+    req.body.locations_id = teacher[0].locations_id;
+
+    /** actualizados los IDs de localizacion y usuario */
+    await updateLocation(teacher[0].locations_id, req.body);
+    await updateUser(teacher[0].user_id, req.body);
+
+    /** actualizamos el profe */
+    await updateTeacher(teacher[0].id, req.body);
+    const [modifiedTeacher] = await getById(teacher[0].id);
+    res.json(modifiedTeacher[0]);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+/** UPDATE validate a teacher */
+router.put("/validate/:teacherId", async (req, res) => {
+  //res.json("validando a un profe");
+  const { teacherId } = req.params;
+  try {
+    /** Se valida a un profe */
+    const [teacherValidated] = await validateTeacher(teacherId);
+    //res.json(teacherValidated.affectedRows);
+    if (teacherValidated.affectedRows !== 1) {
+      return res.json({
+        error: "No se ha podido validar el profesor con ID = " + teacherId,
+      });
     }
 
-    // Obtener los alumnos inscritos con el profesor
-    const students = await Student.find({ teacher_id: teacher.id }).populate(
-      "user"
-    );
+    /** recuperamos el profe */
+    const [teacher] = await getById(teacherId);
 
-    res.status(200).json({ students });
+    /** Se habilita en usuarios */
+    const [user] = await deleteUser(teacher[0].user_id, null);
+    //res.json(user.affectedRows);
+
+    if (user.affectedRows !== 1) {
+      return res.json({
+        error:
+          "Se ha validado el profesor cuyo ID es " +
+          teacherId +
+          "pero ha ocurrido un error al quitarlo de unsubscribe. Póngase en contacto con el administrador",
+      });
+    }
+    res.json(teacher[0]);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(400).json({
+      fatal: "No se ha podido activar el estudiante cuyo ID es " + teacherId,
+    });
+  }
+});
+
+router.delete("/:teacherId", async (req, res) => {
+  //res.json("Eliminando un profesor");
+  const { teacherId } = req.params;
+  try {
+    const [result] = await getById(teacherId);
+    const teacher = result[0];
+
+    if (teacher.unsubscribed_date !== null) {
+      return res.json({
+        error:
+          "El profesor con ID = " +
+          teacherId +
+          " ha sido dado de baja el dia " +
+          dayjs(teacher.unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+      });
+    }
+    /** Fecha de baja */
+    const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    await deleteUser(teacher.user_id, unsubscribed_date);
+
+    /** Profesor dado de baja*/
+    await unvalidatedTeacher(teacherId);
+    teacher.unsubscribed_date = unsubscribed_date;
+    res.json(teacher);
+  } catch (error) {
+    res.status(500).json({
+      fatal: "No se ha podido dar de baja al profesor cuyo ID es " + teacherId,
+    });
   }
 });
 
