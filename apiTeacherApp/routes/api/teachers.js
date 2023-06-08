@@ -7,7 +7,6 @@ const {
 } = require("../../models/location.model");
 const {
   getAll,
-  getById,
   getTeacherClassHours,
   getTeacherByFilter,
   createTeacher,
@@ -15,6 +14,7 @@ const {
   updateTeacher,
   validateTeacher,
   unvalidatedTeacher,
+  getTeacherById,
 } = require("../../models/teacher.model");
 const {
   createUser,
@@ -39,7 +39,7 @@ router.get("/:teacherId", async (req, res) => {
   //res.json("Obteniendo un teacher by ID");
   const { teacherId } = req.params;
   try {
-    const [teacher] = await getById(teacherId);
+    const [teacher] = await getTeacherById(teacherId);
     if (teacher.length === 0) {
       return res.json({
         fatal: "No existe el profesor con ID = " + teacherId,
@@ -102,7 +102,7 @@ router.post("/", async (req, res) => {
 
     /** Creamos un nuevo estudiante y lo insertamos*/
     const [resultTeacher] = await createTeacher(req.body);
-    const [newTeacher] = await getById(resultTeacher.insertId);
+    const [newTeacher] = await getTeacherById(resultTeacher.insertId);
     res.json(newTeacher[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -128,7 +128,7 @@ router.put("/:teacherId", async (req, res) => {
 
     /** actualizamos el profe */
     await updateTeacher(teacher[0].id, req.body);
-    const [modifiedTeacher] = await getById(teacher[0].id);
+    const [modifiedTeacher] = await getTeacherById(teacher[0].id);
     res.json(modifiedTeacher[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -150,7 +150,7 @@ router.put("/validate/:teacherId", async (req, res) => {
     }
 
     /** recuperamos el profe */
-    const [teacher] = await getById(teacherId);
+    const [teacher] = await getTeacherById(teacherId);
 
     /** Se habilita en usuarios */
     const [user] = await deleteUser(teacher[0].user_id, null);
@@ -176,7 +176,7 @@ router.delete("/:teacherId", async (req, res) => {
   //res.json("Eliminando un profesor");
   const { teacherId } = req.params;
   try {
-    const [result] = await getById(teacherId);
+    const [result] = await getTeacherById(teacherId);
     const teacher = result[0];
 
     if (teacher.unsubscribed_date !== null) {
