@@ -1,8 +1,8 @@
-const getAll = () => {
+const getAllLocations = () => {
   return db.query("SELECT * FROM locations");
 };
 
-const getById = (locationId) => {
+const getLocationById = (locationId) => {
   return db.query("SELECT * FROM locations WHERE id = ?", [locationId]);
 };
 
@@ -22,21 +22,7 @@ const getCitiesByProvince = (province_id) => {
   return db.query("select * from city where province_id = ?", [province_id]);
 };
 
-const create = ({ city_id, latitude, longitude, address }) => {
-  return db.query(
-    "INSERT INTO locations (city_id, latitude, longitude, address) VALUES (?, ?, ?, ?)",
-    [city_id, latitude, longitude, address]
-  );
-};
-
-const update = (locationId, { city_id, latitude, longitude, address }) => {
-  return db.query(
-    "UPDATE locations SET city_id = ?, latitude = ?, longitude = ?, address = ? WHERE id = ?",
-    [city_id, latitude, longitude, address, locationId]
-  );
-};
-
-const deleteById = (locationId) => {
+const deleteLocationById = (locationId) => {
   return db.query("DELETE FROM locations WHERE id = ?", [locationId]);
 };
 
@@ -59,15 +45,13 @@ const updateLocation = (
 };
 
 module.exports = {
-  getAll,
-  getById,
+  getAllLocations,
+  getLocationById,
   getAllCities,
   getAllProvinces,
   getCityById,
   getCitiesByProvince,
-  create,
-  update,
-  deleteById,
+  deleteLocationById,
   createLocation,
   updateLocation,
 };

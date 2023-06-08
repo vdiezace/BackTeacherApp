@@ -61,7 +61,7 @@ const sqlUpdateTeacherById =
 
 // TODO: Hacer método con la paginación de los profes
 
-const getAll = () => {
+const getAllTeachers = () => {
   return db.query(sqlAllTeacherData + "order by teacher_id");
 };
 
@@ -161,7 +161,7 @@ const getIdTeacherByUsedId = (userId) => {
 };
 
 module.exports = {
-  getAll,
+  getAllTeachers,
   getTeacherById,
   getTeacherByFilter,
   getTeacherClassHours,

@@ -1,8 +1,8 @@
-const { createLocation } = require("../models/location.model");
-const { create, getById } = require("../models/student.model");
-const { createUser } = require("../models/user.model");
-
 const router = require("express").Router();
+
+const { createLocation } = require("../models/location.model");
+const { createStudent, getStudentById } = require("../models/student.model");
+const { createUser } = require("../models/user.model");
 
 router.post("/student", async (req, res) => {
   //res.json("Creando un nuevo registro");
@@ -17,8 +17,8 @@ router.post("/student", async (req, res) => {
     req.body.user_id = resultUser.insertId;
 
     /** Creamos un nuevo estudiante y lo insertamos*/
-    const [resultStudent] = await create(req.body);
-    const [newStudent] = await getById(resultStudent.insertId);
+    const [resultStudent] = await createStudent(req.body);
+    const [newStudent] = await getStudentById(resultStudent.insertId);
     res.json(newStudent[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
