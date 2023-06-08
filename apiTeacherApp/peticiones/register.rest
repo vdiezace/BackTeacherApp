@@ -1,0 +1,20 @@
+@host=http://localhost:3000
+
+POST {{host}}/register/student
+Content-Type: application/json
+
+{
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "username":"carl34",
+    "email": "carl34@gmail.com",
+    "password": "carl3",
+    "role_id": 5,
+    "phone": "123456783",
+    "avatar": "https://robohash.org/eveniettotamqui.png?size=50x50&set=set1",
+    "latitude": 41.6,
+    "longitude": -3.5,
+    "city_id": 16,
+    "address": "Avenida de los Francos 34"
+}
+
