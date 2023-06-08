@@ -1,4 +1,4 @@
-/** QUERIE por el que se obtiene toda la información de los estudiantes
+/** QUERY por el que se obtiene toda la información de los estudiantes
  * incluyendo su nombre, apellidos, email, contraseña, rol, fecha de creacion y de actualizacion
  * localizacion: latitud, longitud, provincia, ciudad y calle */
 const getAll = () => {
@@ -7,7 +7,7 @@ const getAll = () => {
   );
 };
 
-/** QUERIE por el que se obtiene toda la información de un único estudiante
+/** QUERY por el que se obtiene toda la información de un único estudiante
  * incluyendo su nombre, apellidos, email, contraseña, rol, fecha de creacion y de actualizacion
  * localizacion: latitud, longitud, provincia, ciudad y calle */
 const getById = (studentId) => {
@@ -62,7 +62,7 @@ const getDeactive = () => {
   );
 };
 
-/**** Student QUERIE to use in other classes */
+/**** Student QUERY to use in other classes */
 const getIdByUserId = (userId) => {
   return db.query("select id from students where user_id = ?", [userId]);
 };
