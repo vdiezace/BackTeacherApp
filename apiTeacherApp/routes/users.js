@@ -3,7 +3,8 @@ const router = express.Router();
 const bycript = require("bcryptjs");
 
 const { getAllUser, getByEmail } = require("../models/user.model");
-const { getIdByUserId } = require("../models/student.model");
+const { getIdStudentByUserId } = require("../models/student.model");
+const { getIdTeacherByUsedId } = require("../models/teacher.model");
 
 router.get("/", async (req, res) => {
   //res.send("Pasa por aqui");
@@ -36,12 +37,16 @@ router.post("/login", async (req, res) => {
     }
     /** Login Success */
     let id;
-    res_student = await getIdByUserId(user.id);
+    res_student = await getIdStudentByUserId(user.id);
+    res_teacher = await getIdTeacherByUsedId(user.id);
     switch (user.role_id) {
       case 1:
         id = user.id;
         break;
       case 2:
+        id = res_teacher.id;
+        break;
+      case 3:
         id = res_student.id;
         break;
     }
