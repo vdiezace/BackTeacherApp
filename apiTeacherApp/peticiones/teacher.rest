@@ -18,8 +18,8 @@ Content-Type: application/json
 {
   "first_name": "Federico",
   "last_name": "Garcia",
-  "username": "fgarcia5",
-  "email": "fgarcia5@gmail.com",
+  "username": "fgarcia157",
+  "email": "fgarcia157@gmail.com",
   "password": "12345678",
   "role_id": 3,
  "phone": "678234642",
@@ -67,4 +67,4 @@ Content-Type: application/json
 PUT {{host}}/api/teachers/validate/11
 
 ####
-DELETE {{host}}/api/teachers/18
+DELETE {{host}}/api/teachers/21

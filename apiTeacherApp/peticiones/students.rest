@@ -11,11 +11,11 @@ POST {{host}}/api/students
 Content-Type: application/json
 
 {
-    "first_name": "Carlos",
+    "first_name": "Laura",
     "last_name": "Lopez",
-    "username":"carl34",
-    "email": "carl34@gmail.com",
-    "password": "carl3",
+    "username":"lauri5",
+    "email": "lauri5@gmail.com",
+    "password": "lauri",
     "role_id": 5,
     "phone": "123456783",
     "avatar": "https://robohash.org/eveniettotamqui.png?size=50x50&set=set1",
@@ -34,7 +34,7 @@ Content-Type: application/json
     "last_name": "Lopez",
     "username":"carl33",
     "email": "carlol@gmail.com",
-    "password": "carlol33",
+    "password": "carlol353",
     "role_id": 5,
     "phone": "123456783",
     "avatar": "https://i.pravatar.cc/500?u=mariadelcarmen.herreravillanueva@peticiones.online",
@@ -46,7 +46,7 @@ Content-Type: application/json
 }
 
 #####
-DELETE {{host}}/api/students/19
+DELETE {{host}}/api/students/28
 
 ####
 GET {{host}}/api/students/status/active
@@ -55,5 +55,5 @@ GET {{host}}/api/students/status/active
 GET {{host}}/api/students/status/deactive
 
 ####
-PUT {{host}}/api/students/12/active
+PUT {{host}}/api/students/19/active
 

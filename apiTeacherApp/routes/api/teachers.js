@@ -6,7 +6,6 @@ const {
   updateLocation,
 } = require("../../models/location.model");
 const {
-  getAll,
   getTeacherClassHours,
   getTeacherByFilter,
   createTeacher,
@@ -15,6 +14,7 @@ const {
   validateTeacher,
   unvalidatedTeacher,
   getTeacherById,
+  getAllTeachers,
 } = require("../../models/teacher.model");
 const {
   createUser,
@@ -26,7 +26,7 @@ const {
 router.get("/", async (req, res) => {
   //res.json("obteniendo todos los profesores");
   try {
-    const [teachers] = await getAll();
+    const [teachers] = await getAllTeachers();
     res.json(teachers);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -172,30 +172,30 @@ router.put("/validate/:teacherId", async (req, res) => {
   }
 });
 
+/** DELETE teacher by ID */
 router.delete("/:teacherId", async (req, res) => {
   //res.json("Eliminando un profesor");
   const { teacherId } = req.params;
   try {
-    const [result] = await getTeacherById(teacherId);
-    const teacher = result[0];
+    const [teacher] = await getTeacherById(teacherId);
 
-    if (teacher.unsubscribed_date !== null) {
+    if (teacher[0].unsubscribed_date !== null) {
       return res.json({
         error:
           "El profesor con ID = " +
           teacherId +
           " ha sido dado de baja el dia " +
-          dayjs(teacher.unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+          dayjs(teacher[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
       });
     }
     /** Fecha de baja */
     const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
-    await deleteUser(teacher.user_id, unsubscribed_date);
+    await deleteUser(teacher[0].user_id, unsubscribed_date);
 
     /** Profesor dado de baja*/
-    await unvalidatedTeacher(teacherId);
-    teacher.unsubscribed_date = unsubscribed_date;
-    res.json(teacher);
+    await unvalidatedTeacher(teacher[0].user_id);
+    teacher[0].unsubscribed_date = unsubscribed_date;
+    res.json(teacher[0]);
   } catch (error) {
     res.status(500).json({
       fatal: "No se ha podido dar de baja al profesor cuyo ID es " + teacherId,

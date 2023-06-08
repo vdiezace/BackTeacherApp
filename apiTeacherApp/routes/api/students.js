@@ -3,15 +3,15 @@ const router = express.Router();
 const dayjs = require("dayjs");
 
 const {
-  getAll,
-  getById,
-  create,
-  get,
-  update,
-  deactive,
-  getActive,
-  getDeactive,
-  active,
+  getAllStudents,
+  getStudentById,
+  createStudent,
+  getStudent,
+  updateStudent,
+  getActiveStudent,
+  getDeactiveStudent,
+  activeStudent,
+  deactiveStudent,
 } = require("../../models/student.model");
 const {
   createLocation,
@@ -27,7 +27,7 @@ const {
 router.get("/", async (req, res) => {
   //res.json("pasa por aqui");
   try {
-    const [students] = await getAll();
+    const [students] = await getAllStudents();
     res.json(students);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -40,7 +40,7 @@ router.get("/:studentId", async (req, res) => {
   //res.json(req.params);
   const { studentId } = req.params;
   try {
-    const [student] = await getById(studentId);
+    const [student] = await getStudentById(studentId);
     if (student.length === 0) {
       return res.json({
         fatal: "No existe el estudiante con cuyo ID es " + studentId,
@@ -70,8 +70,8 @@ router.post("/", async (req, res) => {
     req.body.user_id = resultUser.insertId;
 
     /** Creamos un nuevo estudiante y lo insertamos*/
-    const [resultStudent] = await create(req.body);
-    const [newStudent] = await getById(resultStudent.insertId);
+    const [resultStudent] = await createStudent(req.body);
+    const [newStudent] = await getStudentById(resultStudent.insertId);
     res.json(newStudent[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -84,7 +84,7 @@ router.put("/:studentId", async (req, res) => {
   const { studentId } = req.params;
   try {
     /** Obtenemos los datos del estudiante */
-    const [student] = await get(studentId);
+    const [student] = await getStudent(studentId);
     //res.json(student);
     //res.json(student[0].user_id);
 
@@ -98,8 +98,8 @@ router.put("/:studentId", async (req, res) => {
     await updateUser(student[0].user_id, req.body);
 
     /** actualizamos el estudiante */
-    await update(student[0].id, req.body);
-    const [modifiedStudent] = await getById(student[0].id);
+    await updateStudent(student[0].id, req.body);
+    const [modifiedStudent] = await getStudentById(student[0].id);
     res.json(modifiedStudent[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -111,16 +111,16 @@ router.delete("/:studentId", async (req, res) => {
   //res.json("Eliminando un estudiante");
   const { studentId } = req.params;
   try {
-    const [student] = await getById(studentId);
+    const [student] = await getStudentById(studentId);
     //res.json(student);
     //res.json(student[0].unsubscribed_date);
     if (student[0].unsubscribed_date !== null) {
       return res.json({
         error:
-          "El estudiante " +
+          "El estudiante con ID = " +
           studentId +
           " ha sido dado de baja el dia " +
-          student[0].unsubscribed_date,
+          dayjs(student[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
       });
     }
     /** Fecha de baja */
@@ -129,10 +129,10 @@ router.delete("/:studentId", async (req, res) => {
     //res.json(student[0].user_id);
 
     /** desactiva el estudiante */
-    const [resultStudent] = await deactive(student[0].user_id);
+    await deactiveStudent(student[0].user_id);
     /** actualizamos el estudiante */
-    const [deactiveStudent] = await getById(resultStudent);
-    res.json(deactiveStudent[0]);
+    student[0].unsubscribed_date = unsubscribed_date;
+    res.json(student[0]);
   } catch (error) {
     res.status(500).json({
       fatal:
@@ -145,7 +145,7 @@ router.delete("/:studentId", async (req, res) => {
 router.get("/status/active", async (req, res) => {
   //res.json("obteniendo los estudiantes activos");
   try {
-    const [students] = await getActive();
+    const [students] = await getActiveStudent();
     res.json(students);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -156,7 +156,7 @@ router.get("/status/active", async (req, res) => {
 router.get("/status/deactive", async (req, res) => {
   //res.json("obteniendo los estudiantes activos");
   try {
-    const [students] = await getDeactive();
+    const [students] = await getDeactiveStudent();
     res.json(students);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -169,7 +169,7 @@ router.put("/:studentId/active", async (req, res) => {
   const { studentId } = req.params;
   try {
     /** Se activa el estudiante */
-    const [studentActivated] = await active(studentId);
+    const [studentActivated] = await activeStudent(studentId);
     //res.json(studentActivated.affectedRows);
     if (studentActivated.affectedRows !== 1) {
       return res.json({
@@ -178,7 +178,7 @@ router.put("/:studentId/active", async (req, res) => {
     }
 
     /** recuperamos el estudiante */
-    const [student] = await getById(studentId);
+    const [student] = await getStudentById(studentId);
     //res.json(student[0].user_id);
 
     /** Se habilita en usuarios */

@@ -1,21 +1,21 @@
 const router = require("express").Router();
 
 const {
-  getAll,
   getAllProvinces,
   getAllCities,
   getCitiesByProvince,
-  create,
-  getById,
-  update,
-  deleteById,
+  getAllLocations,
+  createLocation,
+  getLocationById,
+  updateLocation,
+  deleteLocationById,
 } = require("../models/location.model");
 
 /** GET all locations */
 router.get("/", async (req, res) => {
   //res.send("pasa por aqui");
   try {
-    const [locations] = await getAll();
+    const [locations] = await getAllLocations();
     res.json(locations);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -51,6 +51,12 @@ router.get("/province/city/:province_id", async (req, res) => {
   //res.json(province_id);
   try {
     const [city] = await getCitiesByProvince(province_id);
+    if (city.length === 0) {
+      return res.json({
+        message:
+          "No existe la ciudad con el ID de provincia igual a " + province_id,
+      });
+    }
     res.json(city);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -61,9 +67,9 @@ router.get("/province/city/:province_id", async (req, res) => {
 router.post("/", async (req, res) => {
   //res.json("Se crea una nueva localizacion");
   try {
-    const [result] = await create(req.body);
+    const [result] = await createLocation(req.body);
     //res.json(result);
-    const [newLocation] = await getById(result.insertId);
+    const [newLocation] = await getLocationById(result.insertId);
     res.json(newLocation[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -77,9 +83,14 @@ router.put("/:location_id", async (req, res) => {
   const { location_id } = req.params;
   //console.log(location_id);
   try {
-    await update(location_id, req.body);
+    await updateLocation(location_id, req.body);
     //res.json(result);
-    const [location] = await getById(location_id);
+    const [location] = await getLocationById(location_id);
+    if (location.legth === 0) {
+      return res.json({
+        message: "No existe la localización con ID = " + location_id,
+      });
+    }
     res.json(location[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -91,8 +102,13 @@ router.delete("/:location_id", async (req, res) => {
   //res.json("Se elimina una localizacion");
   const { location_id } = req.params;
   try {
-    const [location] = await getById(location_id);
-    await deleteById(location_id);
+    const [location] = await getLocationById(location_id);
+    await deleteLocationById(location_id);
+    if (location.length === 0) {
+      return res.json({
+        message: "No existe la localización con ID = " + location_id,
+      });
+    }
     res.json(location[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
