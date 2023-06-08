@@ -8,6 +8,10 @@ const {
   deleteById,
   deleteAll,
 } = require("../../models/admin.model");
+const {
+  validateTeacher,
+  getTeacherById,
+} = require("../../models/teacher.model");
 
 /** GET all admins */
 router.get("/", async (req, res) => {
@@ -80,6 +84,27 @@ router.delete("/", async (req, res) => {
   try {
     await deleteAll();
     res.json({ message: "No hay usuarios administradores" });
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+/** Validate a teacher */
+router.put("/validate/:teacherId", async (req, res) => {
+  //res.json("Validando un teacher por el admin");
+  const { teacherId } = req.params;
+  try {
+    await validateTeacher(teacherId, req.body);
+    const [teacher] = await getTeacherById(teacherId);
+    if (teacher.length === 0) {
+      return res.json({
+        fatal: "No existe el profesor con el ID =" + teacherId,
+      });
+    }
+    res.json({
+      message:
+        "Se ha cambiado el estado del profesor ha " + teacher[0].is_approved,
+    });
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }

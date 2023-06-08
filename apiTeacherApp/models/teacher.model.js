@@ -65,7 +65,7 @@ const getAll = () => {
   return db.query(sqlAllTeacherData + "order by teacher_id");
 };
 
-const getById = (teacherId) => {
+const getTeacherById = (teacherId) => {
   return db.query(sqlTeachersData + " and (t.id = ?)", [teacherId]);
 };
 
@@ -162,7 +162,7 @@ const getIdTeacherByUsedId = (userId) => {
 
 module.exports = {
   getAll,
-  getById,
+  getTeacherById,
   getTeacherByFilter,
   getTeacherClassHours,
   createTeacher,

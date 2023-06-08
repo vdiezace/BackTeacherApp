@@ -37,3 +37,11 @@ DELETE {{host}}/api/admin/70
 
 #####
 DELETE {{host}}/api/admin
+
+#####
+PUT {{host}}/api/admin/validate/3
+Content-Type: application/json
+
+{
+    "is_approved": 1
+}
