@@ -63,7 +63,7 @@ const getDeactive = () => {
 };
 
 /**** Student QUERY to use in other classes */
-const getIdByUserId = (userId) => {
+const getIdStudentByUserId = (userId) => {
   return db.query("select id from students where user_id = ?", [userId]);
 };
 
@@ -77,5 +77,5 @@ module.exports = {
   active,
   getActive,
   getDeactive,
-  getIdByUserId,
+  getIdStudentByUserId,
 };
