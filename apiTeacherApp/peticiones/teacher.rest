@@ -2,8 +2,8 @@
 ####
 GET {{host}}/api/teachers
 
-#####
-GET {{host}}/api/teachers/11
+###### /** GET a teacher by ID with avg_rating*/
+GET {{host}}/api/teachers/16
 
 ###
 GET {{host}}/api/teachers/hours/1
