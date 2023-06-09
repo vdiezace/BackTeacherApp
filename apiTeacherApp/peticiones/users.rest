@@ -3,6 +3,9 @@
 #### USERS #######
 GET {{host}}/users
 
+#####
+GET {{host}}/api/users/email/op50@gmail.com
+
 ###### API USERS ########
 GET {{host}}/api/users
 
@@ -17,9 +20,9 @@ POST {{host}}/api/users
 Content-Type: application/json
 
 {
-    "role_id": 5,
-    "username": "Julita",
-    "email": "juli5@gmail.com",
+    "role_id": 3,
+    "username": "Julita1",
+    "email": "julita1@gmail.com",
     "password": "Julita*2",
     "first_name": "Julia",
     "last_name": "García"

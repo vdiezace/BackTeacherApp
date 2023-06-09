@@ -2,7 +2,7 @@
 
 ####
 GET {{host}}/api/admin
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTIzODQ3LCJpYXQiOjE2ODYzMTkwNDd9.n4e3MaKNGQz9skFv_PXQN3yyGenla3byYIDrppfrzLU
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
 
 ####
 GET {{host}}/api/admin/131

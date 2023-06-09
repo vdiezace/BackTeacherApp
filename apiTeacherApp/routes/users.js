@@ -2,9 +2,14 @@ const express = require("express");
 const router = express.Router();
 const bycript = require("bcryptjs");
 
-const { getAllUser, getByEmail } = require("../models/user.model");
+const {
+  getAllUser,
+  getByEmail,
+  getUserByEmail,
+} = require("../models/user.model");
 const { getIdStudentByUserId } = require("../models/student.model");
 const { getIdTeacherByUsedId } = require("../models/teacher.model");
+const { generateToken } = require("../utils/helpers");
 
 router.get("/", async (req, res) => {
   //res.send("Pasa por aqui");
@@ -31,8 +36,8 @@ router.post("/login", async (req, res) => {
     //res.json(user);
     /** Comprobamos que las constraseñas sean iguales */
     //res.json(user.password);
-    const checkPssw = bycript.compare(password, user.password);
-    if (!checkPssw) {
+    const checkPsw = bycript.compareSync(password, user.password);
+    if (!checkPsw) {
       return res.json({ fatal: "Error en email y/o contraseña" });
     }
     /** Login Success */
@@ -51,9 +56,21 @@ router.post("/login", async (req, res) => {
         break;
     }
 
-    res.json({ success: "Login correcto" });
+    res.json({
+      success: "Login correcto",
+      token: generateToken(id, user.title),
+    });
   } catch (error) {
     res.status(500).json({ fatal: error.message });
+  }
+});
+
+router.get("/:email", async (req, res) => {
+  try {
+    const [user] = await getUserByEmail(req.params.email);
+    res.json(user[0]);
+  } catch (error) {
+    res.json({ fatal: error.message });
   }
 });
 
