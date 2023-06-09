@@ -1,0 +1,28 @@
+@host=http://localhost:3000
+
+GET {{host}}/api/reviews/19
+
+#####
+POST {{host}}/api/reviews
+Content-Type: application/json
+
+{
+    "teacher_id":2, 
+    "student_id": 3, 
+    "rating": 4, 
+    "comment": "Muy profesional, se nota que le gusta enseñar"
+}
+
+#####
+PUT {{host}}/api/reviews/32
+Content-Type: application/json
+
+{
+    "teacher_id":2, 
+    "student_id": 4, 
+    "rating": 3, 
+    "comment": "Muy profesional, se nota que le gusta enseñar"
+}
+
+#####
+GET {{host}}/api/reviews?teacherid=1&studentid=1

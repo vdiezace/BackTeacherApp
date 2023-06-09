@@ -21,6 +21,7 @@ const {
   updateUser,
   deleteUser,
 } = require("../../models/user.model");
+const { getAvgReviewRatingByTeacher } = require("../../models/review.model");
 
 /** GET all teachers */
 router.get("/", async (req, res) => {
@@ -33,8 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/** GET a teacher by ID */
-//TODO: add average rating
+/** GET a teacher by ID con la puntuacion media*/
 router.get("/:teacherId", async (req, res) => {
   //res.json("Obteniendo un teacher by ID");
   const { teacherId } = req.params;
@@ -42,9 +42,13 @@ router.get("/:teacherId", async (req, res) => {
     const [teacher] = await getTeacherById(teacherId);
     if (teacher.length === 0) {
       return res.json({
-        fatal: "No existe el profesor con ID = " + teacherId,
+        message: "No existe el profesor con ID = " + teacherId,
       });
     }
+
+    /** Añadimos su puntuación media */
+    const [avgRating] = await getAvgReviewRatingByTeacher(teacherId);
+    teacher[0].avg_rating = avgRating[0].avg_rating;
     res.json(teacher[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
