@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bcrypt = require("bcryptjs");
 
 const { createLocation } = require("../models/location.model");
 const { createStudent, getStudentById } = require("../models/student.model");
@@ -7,6 +8,7 @@ const { createUser } = require("../models/user.model");
 router.post("/student", async (req, res) => {
   //res.json("Creando un nuevo registro");
   try {
+    req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Creamos una nueva localización */
     const [resultLocation] = await createLocation(req.body);
     /** Obtenemos el id y lo guardamos en locations_id */

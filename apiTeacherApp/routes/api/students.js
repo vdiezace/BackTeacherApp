@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const dayjs = require("dayjs");
+const bcrypt = require("bcryptjs");
 
 const {
   getAllStudents,
@@ -56,6 +57,7 @@ router.get("/:studentId", async (req, res) => {
 router.post("/", async (req, res) => {
   //res.json("Creando un nuevo estudiante");
   try {
+    req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Creamos una nueva localización */
     const [resultLocation] = await createLocation(req.body);
     //res.json(resultLocation);
@@ -83,6 +85,7 @@ router.put("/:studentId", async (req, res) => {
   //res.json("actualizando un estudiante");
   const { studentId } = req.params;
   try {
+    req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Obtenemos los datos del estudiante */
     const [student] = await getStudent(studentId);
     //res.json(student);

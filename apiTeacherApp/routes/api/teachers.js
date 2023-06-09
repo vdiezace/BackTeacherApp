@@ -22,6 +22,7 @@ const {
   deleteUser,
 } = require("../../models/user.model");
 const { getAvgReviewRatingByTeacher } = require("../../models/review.model");
+const bcrypt = require("bcryptjs");
 
 /** GET all teachers */
 router.get("/", async (req, res) => {
@@ -97,6 +98,7 @@ router.get("/filters/:filterId", async (req, res) => {
 router.post("/", async (req, res) => {
   //res.json("Creando un nuevo profesor");
   try {
+    req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
     const [newUser] = await createUser(req.body);
     req.body.user_id = newUser.insertId;
@@ -113,11 +115,12 @@ router.post("/", async (req, res) => {
   }
 });
 
-/** UPDATE new teacher */
+/** UPDATE a teacher */
 router.put("/:teacherId", async (req, res) => {
   //res.json("Actualizando un profesor");
   const { teacherId } = req.params;
   try {
+    req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Obtenemos los datos del profe */
     const [teacher] = await getTeacher(teacherId);
 
