@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bcrypt = require("bcryptjs");
 
 const {
   getAll,
@@ -45,6 +46,7 @@ router.get("/:adminId", async (req, res) => {
 router.post("/", async (req, res) => {
   //res.json("Creando un nuevo admin");
   try {
+    req.body.password = bcrypt.hashSync(req.body.password, 8);
     const [result] = await create(req.body);
     //res.json(result.insertId);
     const [newAdmin] = await getById(result.insertId);
