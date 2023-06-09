@@ -2,9 +2,10 @@
 
 ####
 GET {{host}}/api/admin
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTIzODQ3LCJpYXQiOjE2ODYzMTkwNDd9.n4e3MaKNGQz9skFv_PXQN3yyGenla3byYIDrppfrzLU
 
 ####
-GET {{host}}/api/admin/100
+GET {{host}}/api/admin/131
 
 ####
 POST {{host}}/api/admin
@@ -12,11 +13,11 @@ Content-Type: application/json
 
 {
   "role_id": 1,
-  "username": "Alba",
-  "email": "albi@gmail.com",
+  "username": "lfuentes",
+  "email": "lfuentes@gmail.com",
   "password": "12345678",
-  "first_name": "Alba",
-  "last_name": "Santana"
+  "first_name": "Lucia",
+  "last_name": "Fuentes"
 }
 
 #####

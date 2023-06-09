@@ -2,12 +2,12 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 
 const {
-  getAll,
-  getById,
-  create,
-  update,
-  deleteById,
-  deleteAll,
+  getAllAdmins,
+  createAdmin,
+  getAdmintById,
+  updateAdmin,
+  deleteAdminById,
+  deleteAllAdmins,
 } = require("../../models/admin.model");
 const {
   validateTeacher,
@@ -18,7 +18,7 @@ const {
 router.get("/", async (req, res) => {
   //res.json("Obteniendo todos los administradores");
   try {
-    const [admins] = await getAll();
+    const [admins] = await getAllAdmins();
     res.json(admins[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -47,9 +47,9 @@ router.post("/", async (req, res) => {
   //res.json("Creando un nuevo admin");
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
-    const [result] = await create(req.body);
+    const [result] = await createAdmin(req.body);
     //res.json(result.insertId);
-    const [newAdmin] = await getById(result.insertId);
+    const [newAdmin] = await getAdmintById(result.insertId);
     res.json(newAdmin[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -61,8 +61,8 @@ router.put("/:adminId", async (req, res) => {
   //res.json("actualizando un admin");
   const { adminId } = req.params;
   try {
-    await update(adminId, req.body);
-    const [admin] = await getById(adminId);
+    await updateAdmin(adminId, req.body);
+    const [admin] = await getAdmintById(adminId);
     res.json(admin[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -73,8 +73,8 @@ router.delete("/:adminId", async (req, res) => {
   //res.json("Eliminando un admin");
   const { adminId } = req.params;
   try {
-    const [admin] = await getById(adminId);
-    await deleteById(adminId);
+    const [admin] = await getAdmintById(adminId);
+    await deleteAdminById(adminId);
     res.json(admin[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -84,7 +84,7 @@ router.delete("/:adminId", async (req, res) => {
 router.delete("/", async (req, res) => {
   //res.json("Eliminando todos los admins");
   try {
-    await deleteAll();
+    await deleteAllAdmins();
     res.json({ message: "No hay usuarios administradores" });
   } catch (error) {
     res.status(500).json({ fatal: error.message });
