@@ -6,6 +6,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJf
 
 ####
 GET {{host}}/api/admin/131
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
 
 ####
 POST {{host}}/api/admin
@@ -35,9 +36,13 @@ Content-Type: application/json
 
 #####
 DELETE {{host}}/api/admin/70
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
+
 
 #####
 DELETE {{host}}/api/admin
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
+
 
 #####
 PUT {{host}}/api/admin/validate/3

@@ -4,18 +4,24 @@ const bcrypt = require("bcryptjs");
 const {
   getAllAdmins,
   createAdmin,
-  getAdmintById,
   updateAdmin,
   deleteAdminById,
   deleteAllAdmins,
+  getAdminById,
 } = require("../../models/admin.model");
 const {
   validateTeacher,
   getTeacherById,
 } = require("../../models/teacher.model");
+const {
+  checkAdmin,
+  checkError,
+  newAdmin,
+} = require("../../utils/admin.validators");
+const { checkSchema } = require("express-validator");
 
 /** GET all admins */
-router.get("/", async (req, res) => {
+router.get("/", checkAdmin, async (req, res) => {
   //res.json("Obteniendo todos los administradores");
   try {
     const [admins] = await getAllAdmins();
@@ -26,11 +32,11 @@ router.get("/", async (req, res) => {
 });
 
 /** GET admin BY ID */
-router.get("/:adminId", async (req, res) => {
+router.get("/:adminId", checkAdmin, async (req, res) => {
   //res.json("Obteniendo un admin por su id");
   const { adminId } = req.params;
   try {
-    const [admin] = await getById(adminId);
+    const [admin] = await getAdminById(adminId);
     if (admin.length === 0) {
       return res.json({
         fatal: "No existe el administrador con cuyo ID es " + adminId,
@@ -43,13 +49,13 @@ router.get("/:adminId", async (req, res) => {
 });
 
 /** CREATE an admin */
-router.post("/", async (req, res) => {
+router.post("/", checkSchema(newAdmin), checkError, async (req, res) => {
   //res.json("Creando un nuevo admin");
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
     const [result] = await createAdmin(req.body);
     //res.json(result.insertId);
-    const [newAdmin] = await getAdmintById(result.insertId);
+    const [newAdmin] = await getAdminById(result.insertId);
     res.json(newAdmin[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -57,23 +63,23 @@ router.post("/", async (req, res) => {
 });
 
 /** UPDATE an admin */
-router.put("/:adminId", async (req, res) => {
+router.put("/:adminId", checkAdmin, async (req, res) => {
   //res.json("actualizando un admin");
   const { adminId } = req.params;
   try {
     await updateAdmin(adminId, req.body);
-    const [admin] = await getAdmintById(adminId);
+    const [admin] = await getAdminById(adminId);
     res.json(admin[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }
 });
 
-router.delete("/:adminId", async (req, res) => {
+router.delete("/:adminId", checkAdmin, async (req, res) => {
   //res.json("Eliminando un admin");
   const { adminId } = req.params;
   try {
-    const [admin] = await getAdmintById(adminId);
+    const [admin] = await getAdminById(adminId);
     await deleteAdminById(adminId);
     res.json(admin[0]);
   } catch (error) {
