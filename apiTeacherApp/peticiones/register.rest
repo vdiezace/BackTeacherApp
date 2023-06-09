@@ -1,0 +1,46 @@
+@host=http://localhost:3000
+
+POST {{host}}/register/student
+Content-Type: application/json
+
+{
+    "first_name": "Juan",
+    "last_name": "Lopez",
+    "username":"juanito",
+    "email": "junito@gmail.com",
+    "password": "junito",
+    "role_id": 5,
+    "phone": "123456783",
+    "avatar": "https://robohash.org/eveniettotamqui.png?size=50x50&set=set1",
+    "latitude": 41.6,
+    "longitude": -3.5,
+    "city_id": 16,
+    "address": "Avenida de los Francos 34"
+}
+
+####
+POST {{host}}/register/teacher
+Content-Type: application/json
+
+{
+    "first_name": "Marta",
+    "last_name": "Sanchez",
+    "username":"msanchez",
+    "email": "msanchez@gmail.com",
+    "password": "msanchez23",
+    "role_id": 3,
+    "phone": "123456783",
+    "avatar": "https://robohash.org/eveniettotamqui.png?size=50x50&set=set1",
+    "latitude": 41.6,
+    "longitude": -3.5,
+    "city_id": 16,
+    "address": "Avenida de los Francos 34",
+    "price_hour": 10,
+    "experience": 5,
+    "category_id": 1,
+   "subject": "Intro to Maths",
+   "is_approved": 0,
+   "start_class_hour": 8,
+   "end_class_hour":10
+}
+

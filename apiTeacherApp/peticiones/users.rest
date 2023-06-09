@@ -1,4 +1,55 @@
 @host=http://localhost:3000
 
-#### GET ALL USERS
+#### USERS #######
 GET {{host}}/users
+
+#####
+GET {{host}}/api/users/email/op50@gmail.com
+
+###### API USERS ########
+GET {{host}}/api/users
+
+#####
+GET {{host}}/api/users/5
+
+####
+GET {{host}}/api/users/email/op50@gmail.com
+
+####
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+    "role_id": 3,
+    "username": "Julita1",
+    "email": "julita1@gmail.com",
+    "password": "Julita*2",
+    "first_name": "Julia",
+    "last_name": "García"
+}
+
+####
+PUT {{host}}/api/users/1
+Content-Type: application/json
+
+{
+    "role_id": 5,
+    "username": "Julita",
+    "email": "juli5@gmail.com",
+    "password": "Julita*26",
+    "first_name": "Julia",
+    "last_name": "García"
+}
+
+######
+DELETE {{host}}/api/users/98
+
+####
+PUT {{host}}/api/users/location/97
+Content-Type: application/json
+
+{
+    "role": "student",
+    "latitude": -3,
+    "longitude": -1
+}

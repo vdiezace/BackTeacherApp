@@ -1,0 +1,28 @@
+@host=http://localhost:3000
+
+##### admin
+POST {{host}}/users/login
+Content-Type: application/json
+
+{
+    "email": "albi@gmail.com",
+    "password": "12345678"
+}
+
+##### Student
+POST {{host}}/users/login
+Content-Type: application/json
+
+{
+    "email": "junito@gmail.com",
+    "password": "junito"
+}
+
+##### Teacher
+POST {{host}}/users/login
+Content-Type: application/json
+
+{
+    "email": "msanchez@gmail.com",
+    "password": "msanchez23"
+}

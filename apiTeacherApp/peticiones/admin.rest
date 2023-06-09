@@ -1,0 +1,48 @@
+@host=http://localhost:3000
+
+####
+GET {{host}}/api/admin
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
+
+####
+GET {{host}}/api/admin/131
+
+####
+POST {{host}}/api/admin
+Content-Type: application/json
+
+{
+  "role_id": 1,
+  "username": "lfuentes",
+  "email": "lfuentes@gmail.com",
+  "password": "12345678",
+  "first_name": "Lucia",
+  "last_name": "Fuentes"
+}
+
+#####
+PUT {{host}}/api/admin/95
+Content-Type: application/json
+
+{
+  "role_id": 1,
+  "username": "Alba",
+  "email": "alba@gmail.com",
+  "password": "12345678",
+  "first_name": "Alba",
+  "last_name": "Santana"
+}
+
+#####
+DELETE {{host}}/api/admin/70
+
+#####
+DELETE {{host}}/api/admin
+
+#####
+PUT {{host}}/api/admin/validate/3
+Content-Type: application/json
+
+{
+    "is_approved": 1
+}

@@ -1,0 +1,59 @@
+@host=http://localhost:3000
+
+####
+GET {{host}}/api/students
+
+###
+GET {{host}}/api/students/13
+
+###
+POST {{host}}/api/students
+Content-Type: application/json
+
+{
+    "first_name": "Laura",
+    "last_name": "Lopez",
+    "username":"lauri5",
+    "email": "lauri5@gmail.com",
+    "password": "lauri",
+    "role_id": 5,
+    "phone": "123456783",
+    "avatar": "https://robohash.org/eveniettotamqui.png?size=50x50&set=set1",
+    "latitude": 41.6,
+    "longitude": -3.5,
+    "city_id": 16,
+    "address": "Avenida de los Francos 34"
+}
+
+####
+PUT {{host}}/api/students/19
+Content-Type: application/json
+
+{
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "username":"carl33",
+    "email": "carlol@gmail.com",
+    "password": "carlol353",
+    "role_id": 5,
+    "phone": "123456783",
+    "avatar": "https://i.pravatar.cc/500?u=mariadelcarmen.herreravillanueva@peticiones.online",
+    "latitude": 41.6,
+    "longitude": -3.5,
+    "city_id": 16,
+    "address": "Avenida de los Francos 34",
+    "is_active": 0
+}
+
+#####
+DELETE {{host}}/api/students/28
+
+####
+GET {{host}}/api/students/status/active
+
+####
+GET {{host}}/api/students/status/deactive
+
+####
+PUT {{host}}/api/students/19/active
+

@@ -1,0 +1,38 @@
+@host=http://localhost:3000
+
+#### GET all locations
+GET {{host}}/locations
+
+#### GET all provinces
+GET {{host}}/locations/province
+
+#### GET all cities
+GET {{host}}/locations/city
+
+#### GET cities by province
+GET {{host}}/locations/province/city/57
+
+#### CREATE new location
+POST {{host}}/locations
+Content-Type: application/json
+
+{
+    "city_id": 1,
+    "latitude": -32.5,
+    "longitude": -5.5,
+    "address": "P. Sherman"
+}
+
+#### UPDATE a location
+PUT {{host}}/locations/67
+Content-Type: application/json
+
+{
+    "city_id": 4,
+    "latitude": -30.5,
+    "longitude": -4.5,
+    "address": "Avenida Las maravillas"
+}
+
+#### DELETE a location
+DELETE {{host}}/locations/67
