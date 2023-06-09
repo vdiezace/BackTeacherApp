@@ -1,6 +1,7 @@
 @host=http://localhost:3000
 ####
 GET {{host}}/api/teachers
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3JvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjg2OTMwODI2LCJpYXQiOjE2ODYzMjYwMjZ9.Zgp90plQn6rtZTWlaSuUs73XGhV_5L4U2aG4r5N4O1k
 
 ###### /** GET a teacher by ID with avg_rating*/
 GET {{host}}/api/teachers/16
@@ -22,12 +23,12 @@ Content-Type: application/json
   "email": "fgarcia157@gmail.com",
   "password": "12345678",
   "role_id": 3,
- "phone": "678234642",
- "avatar":"https://i.pravatar.cc/500?u=ernesto.alanizcorral@peticiones.online",
- "latitude": -34,
- "longitude": -3,
- "city_id": 3,
- "address": "Gran Via 23",
+  "phone": "678234642",
+  "avatar":"https://i.pravatar.cc/500?u=ernesto.alanizcorral@peticiones.online",
+  "latitude": -34,
+  "longitude": -3,
+  "city_id": 3,
+  "address": "Gran Via 23",
   "price_hour": 10,
   "experience": 5,
   "category_id": 1,

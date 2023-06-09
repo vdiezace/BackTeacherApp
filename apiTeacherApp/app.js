@@ -9,6 +9,7 @@ const locationsRouter = require("./routes/locations");
 const categoriesRouter = require("./routes/categories");
 const registerRouter = require("./routes/register");
 const apiRouter = require("./routes/api");
+const { checkToken } = require("./utils/middlewares");
 
 const app = express();
 
