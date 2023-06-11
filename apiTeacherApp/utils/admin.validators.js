@@ -5,38 +5,38 @@ const newAdmin = {
   name: {
     exists: true,
     trim: true,
-    errorMessage: "The name field is required",
+    errorMessage: "El campo de nombre es obligatorio",
   },
   surname: {
     exists: true,
     trim: true,
-    errorMessage: "The surname field is required",
+    errorMessage: "El campo de apellido es obligatorio",
   },
   email: {
     exists: {
-      errorMessage: "The email field is required",
+      errorMessage: "El campo de correo electrónico es obligatorio",
     },
     trim: true,
     isEmail: {
-      errorMessage: "The email must be valid",
+      errorMessage: "El correo electrónico debe ser válido",
     },
   },
   password: {
     exists: {
-      errorMessage: "The password field is required",
+      errorMessage: "El campo de contraseña es obligatorio",
     },
     trim: true,
     isLength: {
       options: { min: 8 },
-      errorMessage: "Password should be at least 8 chars long",
+      errorMessage: "La contraseña debe tener al menos 8 caracteres",
     },
   },
   role_id: {
     exists: {
-      errorMessage: "The role_id field is required",
+      errorMessage: "El campo de role_id es obligatorio",
     },
     isInt: true,
-    errorMessage: "The role field must be a number",
+    errorMessage: "El campo de role debe ser un número",
   },
 };
 
