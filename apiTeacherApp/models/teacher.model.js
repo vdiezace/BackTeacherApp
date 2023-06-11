@@ -160,6 +160,14 @@ const getIdTeacherByUsedId = (userId) => {
   return db.query("select id from teachers WHERE user_id = ?", [userId]);
 };
 
+const getCategoryById = (categoryId) => {
+  return db.query("select * from branches where id=?", [categoryId]);
+};
+
+const getTeacherByEmail = (email) => {
+  return db.query(sqlTeachersData + "(u.email = ?)", [email]);
+};
+
 module.exports = {
   getAllTeachers,
   getTeacherById,
@@ -171,4 +179,6 @@ module.exports = {
   validateTeacher,
   unvalidatedTeacher,
   getIdTeacherByUsedId,
+  getCategoryById,
+  getTeacherByEmail,
 };

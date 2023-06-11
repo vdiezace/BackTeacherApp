@@ -13,12 +13,12 @@ const {
   validateTeacher,
   getTeacherById,
 } = require("../../models/teacher.model");
+const { checkSchema } = require("express-validator");
 const {
+  newAdminData,
   checkAdmin,
   checkError,
-  newAdmin,
-} = require("../../utils/admin.validators");
-const { checkSchema } = require("express-validator");
+} = require("../../utils/admin.validator");
 
 /** GET all admins */
 router.get("/", checkAdmin, async (req, res) => {
@@ -49,7 +49,7 @@ router.get("/:adminId", checkAdmin, async (req, res) => {
 });
 
 /** CREATE an admin */
-router.post("/", checkSchema(newAdmin), checkError, async (req, res) => {
+router.post("/", checkSchema(newAdminData), checkError, async (req, res) => {
   //res.json("Creando un nuevo admin");
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
@@ -98,7 +98,7 @@ router.delete("/", async (req, res) => {
 });
 
 /** Validate a teacher */
-router.put("/validate/:teacherId", async (req, res) => {
+router.put("/validate/:teacherId", checkAdmin, async (req, res) => {
   //res.json("Validando un teacher por el admin");
   const { teacherId } = req.params;
   try {

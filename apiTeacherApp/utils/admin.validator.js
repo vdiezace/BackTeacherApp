@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const { getAdminById } = require("../models/admin.model");
 
-const newAdmin = {
+const newAdminData = {
   name: {
     exists: true,
     trim: true,
@@ -59,4 +59,4 @@ const checkAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { newAdmin, checkAdmin, checkError };
+module.exports = { newAdminData, checkAdmin, checkError };
