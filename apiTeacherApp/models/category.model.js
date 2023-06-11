@@ -1,7 +1,7 @@
-const getAll = () => {
+const getAllCategories = () => {
   return db.query("SELECT * FROM categories");
 };
 
 module.exports = {
-  getAll,
+  getAllCategories,
 };
