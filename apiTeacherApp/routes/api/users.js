@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { checkSchema } = require("express-validator");
 
 const {
   getAll,
@@ -9,6 +10,12 @@ const {
   deleteById,
   updateLocation,
 } = require("../../models/user.model");
+const {
+  checkUser,
+  checkEmail,
+  newUserData,
+} = require("../../utils/user.validator");
+const { checkError } = require("../../utils/admin.validator");
 
 /** GET all users including ther roles & descriptions */
 router.get("/", async (req, res) => {
@@ -22,7 +29,7 @@ router.get("/", async (req, res) => {
 });
 
 /** GET a user by ID */
-router.get("/:userId", async (req, res) => {
+router.get("/:userId", checkUser, async (req, res) => {
   //res.json("obteniendo un usuario por ID");
   //res.json(req.params);
   const { userId } = req.params;
@@ -40,7 +47,7 @@ router.get("/:userId", async (req, res) => {
 });
 
 /** GET a user by email */
-router.get("/email/:userEmail", async (req, res) => {
+router.get("/email/:userEmail", checkEmail, async (req, res) => {
   //res.json("Obteniendo un usuario por su email");
   const { userEmail } = req.params;
   try {
@@ -57,7 +64,7 @@ router.get("/email/:userEmail", async (req, res) => {
 });
 
 /** CREATE a new user */
-router.post("/", async (req, res) => {
+router.post("/", checkSchema(newUserData), checkError, async (req, res) => {
   //res.json("creando un nuevo usuario");
   try {
     const [result] = await create(req.body);
@@ -69,7 +76,7 @@ router.post("/", async (req, res) => {
 });
 
 /** UPDATE a user by ID */
-router.put("/:userId", async (req, res) => {
+router.put("/:userId", checkUser, async (req, res) => {
   //res.json("Actualizando un usuario");
   //res.json(req.params);
   const { userId } = req.params;
@@ -88,7 +95,7 @@ router.put("/:userId", async (req, res) => {
 });
 
 /** DELETE a user by ID */
-router.delete("/:userId", async (req, res) => {
+router.delete("/:userId", checkUser, async (req, res) => {
   //res.json("Eliminando un usuario");
   const { userId } = req.params;
   try {
