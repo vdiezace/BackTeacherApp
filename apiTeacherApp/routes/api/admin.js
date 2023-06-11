@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
+const { checkSchema } = require("express-validator");
 
 const {
   getAllAdmins,
@@ -9,11 +10,12 @@ const {
   deleteAllAdmins,
   getAdminById,
 } = require("../../models/admin.model");
+
 const {
   validateTeacher,
   getTeacherById,
 } = require("../../models/teacher.model");
-const { checkSchema } = require("express-validator");
+
 const {
   newAdminData,
   checkAdmin,
@@ -98,7 +100,7 @@ router.delete("/", async (req, res) => {
 });
 
 /** Validate a teacher */
-router.put("/validate/:teacherId", checkAdmin, async (req, res) => {
+router.put("/validate/:teacherId", async (req, res) => {
   //res.json("Validando un teacher por el admin");
   const { teacherId } = req.params;
   try {

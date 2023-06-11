@@ -9,7 +9,7 @@ router.use("/students", checkToken, require("./api/students"));
 
 router.use("/students-classes", require("./api/students-classes"));
 
-router.use("/teachers", checkToken, require("./api/teachers"));
+router.use("/teachers", require("./api/teachers"));
 
 router.use("/teachers-classes", require("./api/teachers-classes"));
 
