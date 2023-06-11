@@ -1,5 +1,16 @@
 const router = require("express").Router();
 const dayjs = require("dayjs");
+const bcrypt = require("bcryptjs");
+const { checkSchema } = require("express-validator");
+
+const {
+  newTeacherData,
+  checkBranch,
+  checkEmptyFields,
+  checkTeacher,
+  updateTeacherData,
+} = require("../../utils/teacher.validator");
+const { checkToken } = require("../../utils/middlewares");
 
 const {
   createLocation,
@@ -22,7 +33,6 @@ const {
   deleteUser,
 } = require("../../models/user.model");
 const { getAvgReviewRatingByTeacher } = require("../../models/review.model");
-const bcrypt = require("bcryptjs");
 
 /** GET all teachers */
 router.get("/", async (req, res) => {
@@ -95,55 +105,69 @@ router.get("/filters/:filterId", async (req, res) => {
 });
 
 /** CREATE a new teacher */
-router.post("/", async (req, res) => {
-  //res.json("Creando un nuevo profesor");
-  try {
-    req.body.password = bcrypt.hashSync(req.body.password, 8);
-    /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
-    const [newUser] = await createUser(req.body);
-    req.body.user_id = newUser.insertId;
+router.post(
+  "/",
+  checkSchema(newTeacherData),
+  checkBranch,
+  checkEmptyFields,
+  async (req, res) => {
+    //res.json("Creando un nuevo profesor");
+    try {
+      req.body.password = bcrypt.hashSync(req.body.password, 8);
+      /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
+      const [newUser] = await createUser(req.body);
+      req.body.user_id = newUser.insertId;
 
-    const [newLocation] = await createLocation(req.body);
-    req.body.locations_id = newLocation.insertId;
+      const [newLocation] = await createLocation(req.body);
+      req.body.locations_id = newLocation.insertId;
 
-    /** Creamos un nuevo estudiante y lo insertamos*/
-    const [resultTeacher] = await createTeacher(req.body);
-    const [newTeacher] = await getTeacherById(resultTeacher.insertId);
-    res.json(newTeacher[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+      /** Creamos un nuevo estudiante y lo insertamos*/
+      const [resultTeacher] = await createTeacher(req.body);
+      const [newTeacher] = await getTeacherById(resultTeacher.insertId);
+      res.json(newTeacher[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 /** UPDATE a teacher */
-router.put("/:teacherId", async (req, res) => {
-  //res.json("Actualizando un profesor");
-  const { teacherId } = req.params;
-  try {
-    req.body.password = bcrypt.hashSync(req.body.password, 8);
-    /** Obtenemos los datos del profe */
-    const [teacher] = await getTeacher(teacherId);
+router.put(
+  "/:teacherId",
+  checkToken,
+  checkTeacher,
+  checkSchema(updateTeacherData),
+  checkBranch,
+  checkEmptyFields,
+  async (req, res) => {
+    //res.json("Actualizando un profesor");
+    const { teacherId } = req.params;
+    try {
+      req.body.password = bcrypt.hashSync(req.body.password, 8);
+      /** Obtenemos los datos del profe */
+      const [teacher] = await getTeacher(teacherId);
 
-    /** recogemos el id de la localizacion y del usuario */
-    req.body.user_id = teacher[0].user_id;
-    //res.json(req.body.user_id);
-    req.body.locations_id = teacher[0].locations_id;
+      /** recogemos el id de la localizacion y del usuario */
+      req.body.user_id = teacher[0].user_id;
+      //res.json(req.body.user_id);
+      req.body.locations_id = teacher[0].locations_id;
 
-    /** actualizados los IDs de localizacion y usuario */
-    await updateLocation(teacher[0].locations_id, req.body);
-    await updateUser(teacher[0].user_id, req.body);
+      /** actualizados los IDs de localizacion y usuario */
+      await updateLocation(teacher[0].locations_id, req.body);
+      await updateUser(teacher[0].user_id, req.body);
 
-    /** actualizamos el profe */
-    await updateTeacher(teacher[0].id, req.body);
-    const [modifiedTeacher] = await getTeacherById(teacher[0].id);
-    res.json(modifiedTeacher[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+      /** actualizamos el profe */
+      await updateTeacher(teacher[0].id, req.body);
+      const [modifiedTeacher] = await getTeacherById(teacher[0].id);
+      res.json(modifiedTeacher[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 /** UPDATE validate a teacher */
-router.put("/validate/:teacherId", async (req, res) => {
+router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
   //res.json("validando a un profe");
   const { teacherId } = req.params;
   try {
@@ -180,7 +204,7 @@ router.put("/validate/:teacherId", async (req, res) => {
 });
 
 /** DELETE teacher by ID */
-router.delete("/:teacherId", async (req, res) => {
+router.delete("/:teacherId", checkTeacher, async (req, res) => {
   //res.json("Eliminando un profesor");
   const { teacherId } = req.params;
   try {
