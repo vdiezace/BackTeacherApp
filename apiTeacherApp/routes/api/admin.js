@@ -9,12 +9,10 @@ const {
   deleteAdminById,
   deleteAllAdmins,
   getAdminById,
+  validateTeacherById,
 } = require("../../models/admin.model");
 
-const {
-  validateTeacher,
-  getTeacherById,
-} = require("../../models/teacher.model");
+const { getTeacherById } = require("../../models/teacher.model");
 
 const {
   newAdminData,
@@ -104,7 +102,7 @@ router.put("/validate/:teacherId", async (req, res) => {
   //res.json("Validando un teacher por el admin");
   const { teacherId } = req.params;
   try {
-    await validateTeacher(teacherId, req.body);
+    await validateTeacherById(teacherId, req.body);
     const [teacher] = await getTeacherById(teacherId);
     if (teacher.length === 0) {
       return res.json({
