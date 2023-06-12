@@ -49,6 +49,7 @@ router.put("/:reviewId", async (req, res) => {
   }
 });
 
+/* GET {{host}}/api/reviews?teacherid=1&studentid=1 */
 router.get("/", async (req, res) => {
   //res.json("Obteniedo una review by teacher & student ID");
   const { teacherid: teacherId, studentid: studentId } = req.query;
