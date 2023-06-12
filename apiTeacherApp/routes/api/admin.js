@@ -17,12 +17,13 @@ const { getTeacherById } = require("../../models/teacher.model");
 const {
   newAdminData,
   checkAdmin,
-  checkError,
+  updateAdminData,
 } = require("../../utils/admin.validator");
 const { checkTeacher } = require("../../utils/user.validator");
+const { checkError } = require("../../utils/common.validator");
 
 /** GET all admins */
-router.get("/", checkAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   //res.json("Obteniendo todos los administradores");
   try {
     const [admins] = await getAllAdmins();
@@ -64,17 +65,22 @@ router.post("/", checkSchema(newAdminData), checkError, async (req, res) => {
 });
 
 /** UPDATE an admin */
-router.put("/:adminId", checkAdmin, async (req, res) => {
-  //res.json("actualizando un admin");
-  const { adminId } = req.params;
-  try {
-    await updateAdmin(adminId, req.body);
-    const [admin] = await getAdminById(adminId);
-    res.json(admin[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+router.put(
+  "/:adminId",
+  checkAdmin,
+  checkSchema(updateAdminData),
+  async (req, res) => {
+    //res.json("actualizando un admin");
+    const { adminId } = req.params;
+    try {
+      await updateAdmin(adminId, req.body);
+      const [admin] = await getAdminById(adminId);
+      res.json(admin[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 router.delete("/:adminId", checkAdmin, async (req, res) => {
   //res.json("Eliminando un admin");
