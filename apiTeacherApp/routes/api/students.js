@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const dayjs = require("dayjs");
 const bcrypt = require("bcryptjs");
+const { checkSchema } = require("express-validator");
 
 const {
   getAllStudents,
@@ -23,6 +24,19 @@ const {
   updateUser,
   deleteUser,
 } = require("../../models/user.model");
+const {
+  checkStudent,
+  newStudentData,
+  checkEmptyFields,
+  updateStudentData,
+} = require("../../utils/student.validator");
+const {
+  checkError,
+  checkCity,
+  checkUser,
+  checkRole,
+} = require("../../utils/common.validator");
+const { checkToken, checkTokenRole } = require("../../utils/middlewares");
 
 /** GET All students */
 router.get("/", async (req, res) => {
@@ -36,7 +50,7 @@ router.get("/", async (req, res) => {
 });
 
 /** GET an students BY ID */
-router.get("/:studentId", async (req, res) => {
+router.get("/:studentId", checkStudent, async (req, res) => {
   //res.json("Obtiendo un estudiante por su id");
   //res.json(req.params);
   const { studentId } = req.params;
@@ -54,95 +68,119 @@ router.get("/:studentId", async (req, res) => {
 });
 
 /** CREATE a new student */
-router.post("/", async (req, res) => {
-  //res.json("Creando un nuevo estudiante");
-  try {
-    req.body.password = bcrypt.hashSync(req.body.password, 8);
-    /** Creamos una nueva localización */
-    const [resultLocation] = await createLocation(req.body);
-    //res.json(resultLocation);
-    //res.json(req.body.locations_id);
-    //res.json(resultLocation.insertId);
+router.post(
+  "/",
+  checkSchema(newStudentData),
+  checkError,
+  checkCity,
+  checkEmptyFields,
+  async (req, res) => {
+    //res.json("Creando un nuevo estudiante");
+    try {
+      req.body.password = bcrypt.hashSync(req.body.password, 8);
+      /** Creamos una nueva localización */
+      const [resultLocation] = await createLocation(req.body);
+      //res.json(resultLocation);
+      //res.json(req.body.locations_id);
+      //res.json(resultLocation.insertId);
 
-    /** Obtenemos el id y lo guardamos en locations_id */
-    req.body.locations_id = resultLocation.insertId;
+      /** Obtenemos el id y lo guardamos en locations_id */
+      req.body.locations_id = resultLocation.insertId;
 
-    /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
-    const [resultUser] = await createUser(req.body);
-    req.body.user_id = resultUser.insertId;
+      /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
+      const [resultUser] = await createUser(req.body);
+      req.body.user_id = resultUser.insertId;
 
-    /** Creamos un nuevo estudiante y lo insertamos*/
-    const [resultStudent] = await createStudent(req.body);
-    const [newStudent] = await getStudentById(resultStudent.insertId);
-    res.json(newStudent[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+      /** Creamos un nuevo estudiante y lo insertamos*/
+      const [resultStudent] = await createStudent(req.body);
+      const [newStudent] = await getStudentById(resultStudent.insertId);
+      res.json(newStudent[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 /** UPDATE an student by ID */
-router.put("/:studentId", async (req, res) => {
-  //res.json("actualizando un estudiante");
-  const { studentId } = req.params;
-  try {
-    req.body.password = bcrypt.hashSync(req.body.password, 8);
-    /** Obtenemos los datos del estudiante */
-    const [student] = await getStudent(studentId);
-    //res.json(student);
-    //res.json(student[0].user_id);
+router.put(
+  "/:studentId",
+  checkToken,
+  checkStudent,
+  checkSchema(updateStudentData),
+  checkError,
+  checkUser,
+  checkRole,
+  checkCity,
+  checkEmptyFields,
+  async (req, res) => {
+    //res.json("actualizando un estudiante");
+    const { studentId } = req.params;
+    try {
+      req.body.password = bcrypt.hashSync(req.body.password, 8);
+      /** Obtenemos los datos del estudiante */
+      const [student] = await getStudent(studentId);
+      //res.json(student);
+      //res.json(student[0].user_id);
 
-    /** recogemos el id de la localizacion y del usuario */
-    req.body.user_id = student[0].user_id;
-    //res.json(req.body.user_id);
-    req.body.locations_id = student[0].locations_id;
+      /** recogemos el id de la localizacion y del usuario */
+      req.body.user_id = student[0].user_id;
+      //res.json(req.body.user_id);
+      req.body.locations_id = student[0].locations_id;
 
-    /** actualizados los IDs de localizacion y usuario */
-    await updateLocation(student[0].locations_id, req.body);
-    await updateUser(student[0].user_id, req.body);
+      /** actualizados los IDs de localizacion y usuario */
+      await updateLocation(student[0].locations_id, req.body);
+      await updateUser(student[0].user_id, req.body);
 
-    /** actualizamos el estudiante */
-    await updateStudent(student[0].id, req.body);
-    const [modifiedStudent] = await getStudentById(student[0].id);
-    res.json(modifiedStudent[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+      /** actualizamos el estudiante */
+      await updateStudent(student[0].id, req.body);
+      const [modifiedStudent] = await getStudentById(student[0].id);
+      res.json(modifiedStudent[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 /** DELETE student by ID */
-router.delete("/:studentId", async (req, res) => {
-  //res.json("Eliminando un estudiante");
-  const { studentId } = req.params;
-  try {
-    const [student] = await getStudentById(studentId);
-    //res.json(student);
-    //res.json(student[0].unsubscribed_date);
-    if (student[0].unsubscribed_date !== null) {
-      return res.json({
-        error:
-          "El estudiante con ID = " +
-          studentId +
-          " ha sido dado de baja el dia " +
-          dayjs(student[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+router.delete(
+  "/:studentId",
+  checkToken,
+  checkTokenRole("admin"),
+  checkStudent,
+  async (req, res) => {
+    //res.json("Eliminando un estudiante");
+    const { studentId } = req.params;
+    try {
+      const [student] = await getStudentById(studentId);
+      //res.json(student);
+      //res.json(student[0].unsubscribed_date);
+      if (student[0].unsubscribed_date !== null) {
+        return res.json({
+          error:
+            "El estudiante con ID = " +
+            studentId +
+            " ha sido dado de baja el dia " +
+            dayjs(student[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+        });
+      }
+      /** Fecha de baja */
+      const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+      await deleteUser(student[0].user_id, unsubscribed_date);
+      //res.json(student[0].user_id);
+
+      /** desactiva el estudiante */
+      await deactiveStudent(student[0].user_id);
+      /** actualizamos el estudiante */
+      student[0].unsubscribed_date = unsubscribed_date;
+      res.json(student[0]);
+    } catch (error) {
+      res.status(500).json({
+        fatal:
+          "No se ha podido dar de baja al estudiante cuyo ID es " + studentId,
       });
     }
-    /** Fecha de baja */
-    const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
-    await deleteUser(student[0].user_id, unsubscribed_date);
-    //res.json(student[0].user_id);
-
-    /** desactiva el estudiante */
-    await deactiveStudent(student[0].user_id);
-    /** actualizamos el estudiante */
-    student[0].unsubscribed_date = unsubscribed_date;
-    res.json(student[0]);
-  } catch (error) {
-    res.status(500).json({
-      fatal:
-        "No se ha podido dar de baja al estudiante cuyo ID es " + studentId,
-    });
   }
-});
+);
 
 /** GET active students */
 router.get("/status/active", async (req, res) => {
@@ -167,7 +205,7 @@ router.get("/status/deactive", async (req, res) => {
 });
 
 /** Activating an student */
-router.put("/:studentId/active", async (req, res) => {
+router.put("/:studentId/active", checkStudent, async (req, res) => {
   //res.json("Cambiando el estado de un estudiante");
   const { studentId } = req.params;
   try {

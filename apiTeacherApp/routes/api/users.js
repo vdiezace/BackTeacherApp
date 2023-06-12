@@ -113,7 +113,7 @@ router.delete("/:userId", checkUser, async (req, res) => {
 });
 
 /** UPDATE a user location  */
-router.put("/location/:userId", async (req, res) => {
+router.put("/location/:userId", checkUser, async (req, res) => {
   //res.json("Actualizando la localizacion");
   const { userId } = req.params;
   try {

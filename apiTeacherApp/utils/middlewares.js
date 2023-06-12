@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { getById } = require("../models/user.model");
 
 // Middleware para verificar el token de autenticación
 const checkToken = async (req, res, next) => {
@@ -27,7 +26,7 @@ const checkToken = async (req, res, next) => {
   }
 };
 
-const checkRole = (role) => {
+const checkTokenRole = (role) => {
   return (req, res, next) => {
     if (req.data.user_role !== role) {
       return res.status(401).json({
@@ -39,4 +38,4 @@ const checkRole = (role) => {
   };
 };
 
-module.exports = { checkToken, checkRole };
+module.exports = { checkToken, checkTokenRole };
