@@ -15,7 +15,7 @@ const {
   checkEmail,
   newUserData,
 } = require("../../utils/user.validator");
-const { checkError } = require("../../utils/admin.validator");
+const { checkError } = require("../../utils/common.validator");
 
 /** GET all users including ther roles & descriptions */
 router.get("/", async (req, res) => {
