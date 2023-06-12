@@ -5,7 +5,7 @@ const router = require("express").Router();
 router.use("/admin", checkToken, require("./api/admin"));
 
 router.use("/users", require("./api/users"));
-router.use("/students", checkToken, require("./api/students"));
+router.use("/students", require("./api/students"));
 
 router.use("/students-classes", require("./api/students-classes"));
 
