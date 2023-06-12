@@ -19,6 +19,7 @@ const {
   checkAdmin,
   checkError,
 } = require("../../utils/admin.validator");
+const { checkTeacher } = require("../../utils/user.validator");
 
 /** GET all admins */
 router.get("/", checkAdmin, async (req, res) => {
@@ -98,7 +99,7 @@ router.delete("/", async (req, res) => {
 });
 
 /** Validate a teacher */
-router.put("/validate/:teacherId", async (req, res) => {
+router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
   //res.json("Validando un teacher por el admin");
   const { teacherId } = req.params;
   try {
