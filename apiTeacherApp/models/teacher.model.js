@@ -46,7 +46,7 @@ clases: creation, title, start_date, start_hour, end_hour
 */
 const sqlTeacherClassesByTeacherId =
   "select c.id as class_id, c.students_id, u.first_name, u.last_name," +
-  "cat.title as category, c.creation as creation_date, c.title as subjects,c.start_date, c.start_hour," +
+  "cat.title as category, DATE_FORMAT(c.creation,'%d/%m/%Y %H:%i') as creation_date, c.title as subjects, DATE_FORMAT(c.start_date, '%d/%m/%Y %H:%i') as start_date, c.start_hour," +
   "c.end_hour from classes c, teachers t, students s, users u, categories cat where (c.cancel_date is null)" +
   "and (c.teachers_id = t.id) and (c.students_id = s.id) and (t.category_id = cat.id) and (s.user_id = u.id)" +
   "and (t.id=?) order by c.start_date";
@@ -168,6 +168,10 @@ const getTeacherByEmail = (email) => {
   return db.query(sqlTeachersData + "(u.email = ?)", [email]);
 };
 
+const getTeacherClassesByTeacherId = (teacherId) => {
+  return db.query(sqlTeacherClassesByTeacherId, [teacherId]);
+};
+
 module.exports = {
   getAllTeachers,
   getTeacherById,
@@ -181,4 +185,5 @@ module.exports = {
   getIdTeacherByUsedId,
   getCategoryById,
   getTeacherByEmail,
+  getTeacherClassesByTeacherId,
 };
