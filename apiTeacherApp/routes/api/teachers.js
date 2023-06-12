@@ -4,15 +4,6 @@ const bcrypt = require("bcryptjs");
 const { checkSchema } = require("express-validator");
 
 const {
-  newTeacherData,
-  checkBranch,
-  checkEmptyFields,
-  checkTeacher,
-  updateTeacherData,
-} = require("../../utils/teacher.validator");
-const { checkToken } = require("../../utils/middlewares");
-
-const {
   createLocation,
   updateLocation,
 } = require("../../models/location.model");
@@ -33,6 +24,22 @@ const {
   deleteUser,
 } = require("../../models/user.model");
 const { getAvgReviewRatingByTeacher } = require("../../models/review.model");
+
+const {
+  newTeacherData,
+  checkEmptyFields,
+  checkTeacher,
+  updateTeacherData,
+  checkCategory,
+} = require("../../utils/teacher.validator");
+const { checkToken, checkTokenRole } = require("../../utils/middlewares");
+const {
+  checkError,
+  checkCity,
+  checkUser,
+  checkRole,
+  checkLocation,
+} = require("../../utils/common.validator");
 
 /** GET all teachers */
 router.get("/", async (req, res) => {
@@ -108,7 +115,9 @@ router.get("/filters/:filterId", async (req, res) => {
 router.post(
   "/",
   checkSchema(newTeacherData),
-  checkBranch,
+  checkError,
+  checkCategory,
+  checkCity,
   checkEmptyFields,
   async (req, res) => {
     //res.json("Creando un nuevo profesor");
@@ -137,7 +146,12 @@ router.put(
   checkToken,
   checkTeacher,
   checkSchema(updateTeacherData),
-  checkBranch,
+  checkError,
+  checkUser,
+  checkRole,
+  checkCategory,
+  checkLocation,
+  checkCity,
   checkEmptyFields,
   async (req, res) => {
     //res.json("Actualizando un profesor");
@@ -204,34 +218,41 @@ router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
 });
 
 /** DELETE teacher by ID */
-router.delete("/:teacherId", checkTeacher, async (req, res) => {
-  //res.json("Eliminando un profesor");
-  const { teacherId } = req.params;
-  try {
-    const [teacher] = await getTeacherById(teacherId);
+router.delete(
+  "/:teacherId",
+  checkToken,
+  checkTokenRole("admin"),
+  checkTeacher,
+  async (req, res) => {
+    //res.json("Eliminando un profesor");
+    const { teacherId } = req.params;
+    try {
+      const [teacher] = await getTeacherById(teacherId);
 
-    if (teacher[0].unsubscribed_date !== null) {
-      return res.json({
-        error:
-          "El profesor con ID = " +
-          teacherId +
-          " ha sido dado de baja el dia " +
-          dayjs(teacher[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+      if (teacher[0].unsubscribed_date !== null) {
+        return res.json({
+          error:
+            "El profesor con ID = " +
+            teacherId +
+            " ha sido dado de baja el dia " +
+            dayjs(teacher[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+        });
+      }
+      /** Fecha de baja */
+      const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+      await deleteUser(teacher[0].user_id, unsubscribed_date);
+
+      /** Profesor dado de baja*/
+      await unvalidatedTeacher(teacher[0].user_id);
+      teacher[0].unsubscribed_date = unsubscribed_date;
+      res.json(teacher[0]);
+    } catch (error) {
+      res.status(500).json({
+        fatal:
+          "No se ha podido dar de baja al profesor cuyo ID es " + teacherId,
       });
     }
-    /** Fecha de baja */
-    const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
-    await deleteUser(teacher[0].user_id, unsubscribed_date);
-
-    /** Profesor dado de baja*/
-    await unvalidatedTeacher(teacher[0].user_id);
-    teacher[0].unsubscribed_date = unsubscribed_date;
-    res.json(teacher[0]);
-  } catch (error) {
-    res.status(500).json({
-      fatal: "No se ha podido dar de baja al profesor cuyo ID es " + teacherId,
-    });
   }
-});
+);
 
 module.exports = router;
