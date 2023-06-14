@@ -7,6 +7,7 @@ const {
   getReviewByTeacherAndStudent,
   getReviewByStudentId,
 } = require("../../models/review.model");
+const { checkStudent } = require("../../utils/student.validator");
 
 router.get("/:reviewId", async (req, res) => {
   //res.json("Obteniendo un comentario by ID");
@@ -24,7 +25,7 @@ router.get("/:reviewId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkStudent, async (req, res) => {
   //res.json("creando un nuevo review");
   try {
     const [result] = await create(req.body);
