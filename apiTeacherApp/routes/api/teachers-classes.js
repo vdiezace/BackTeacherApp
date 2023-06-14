@@ -13,7 +13,7 @@ router.get("/:teacherId", async (req, res) => {
           "No existe ninguna clase para el profesor con ID = " + teacherId,
       });
     }
-    res.json(teacherClassInfo[0]);
+    res.json(teacherClassInfo);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }
