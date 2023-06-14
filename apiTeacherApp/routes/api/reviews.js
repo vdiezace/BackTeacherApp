@@ -5,6 +5,7 @@ const {
   create,
   update,
   getReviewByTeacherAndStudent,
+  getReviewByStudentId,
 } = require("../../models/review.model");
 
 router.get("/:reviewId", async (req, res) => {
@@ -67,6 +68,23 @@ router.get("/", async (req, res) => {
     res.json(review[0]);
   } catch (error) {
     res.json({ fatal: error.message });
+  }
+});
+
+/** GET reviews by an student ID */
+router.get("/student/:studentId", async (req, res) => {
+  //res.json("Obteniendo las reviews de un estudiantes");
+  const { studentId } = req.params;
+  try {
+    const [review] = await getReviewByStudentId(studentId);
+    if (review.length === 0) {
+      return res.json({
+        message: "No existe la review con el ID del estudiante =  " + studentId,
+      });
+    }
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
   }
 });
 

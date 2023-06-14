@@ -26,3 +26,6 @@ Content-Type: application/json
 
 #####
 GET {{host}}/api/reviews?teacherid=1&studentid=1
+
+#####
+GET {{host}}/api/reviews/student/3
