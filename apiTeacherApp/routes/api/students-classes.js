@@ -12,7 +12,7 @@ router.get("/:studentId", async (req, res) => {
         res.json("No existe la clase para el estudiante con ID = ") + studentId
       );
     }
-    res.json(classStudentInfo[0]);
+    res.json(classStudentInfo);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }
