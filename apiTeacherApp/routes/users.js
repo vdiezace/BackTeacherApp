@@ -48,10 +48,10 @@ router.post("/login", async (req, res) => {
       case 1:
         id = user.id;
         break;
-      case 3:
+      case 2:
         id = res_teacher[0].id;
         break;
-      case 5:
+      case 3:
         id = res_student[0].id;
         break;
     }
