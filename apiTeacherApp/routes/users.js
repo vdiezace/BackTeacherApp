@@ -48,14 +48,15 @@ router.post("/login", async (req, res) => {
       case 1:
         id = user.id;
         break;
-      case 2:
+      case 3:
         id = res_teacher[0].id;
         break;
-      case 3:
+      case 5:
         id = res_student[0].id;
         break;
     }
-    //res.json(res_student[0].id);
+    //res.json(res_student);
+    //res.json(res_teacher);
     res.json({
       success: "Login correcto",
       token: generateToken(id, user.title),
