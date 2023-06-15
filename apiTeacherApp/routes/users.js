@@ -8,7 +8,7 @@ const {
   getUserByEmail,
 } = require("../models/user.model");
 const { getIdStudentByUserId } = require("../models/student.model");
-const { getIdTeacherByUsedId } = require("../models/teacher.model");
+const { getIdTeacherByUserId } = require("../models/teacher.model");
 const { generateToken } = require("../utils/helpers");
 
 router.get("/", async (req, res) => {
@@ -42,20 +42,20 @@ router.post("/login", async (req, res) => {
     }
     /** Login Success */
     let id;
-    res_student = await getIdStudentByUserId(user.id);
-    res_teacher = await getIdTeacherByUsedId(user.id);
+    const [res_student] = await getIdStudentByUserId(user.id);
+    const [res_teacher] = await getIdTeacherByUserId(user.id);
     switch (user.role_id) {
       case 1:
         id = user.id;
         break;
       case 2:
-        id = res_teacher.id;
+        id = res_teacher[0].id;
         break;
       case 3:
-        id = res_student.id;
+        id = res_student[0].id;
         break;
     }
-
+    //res.json(res_student[0].id);
     res.json({
       success: "Login correcto",
       token: generateToken(id, user.title),

@@ -156,7 +156,7 @@ const unvalidatedTeacher = (teacherId) => {
   ]);
 };
 
-const getIdTeacherByUsedId = (userId) => {
+const getIdTeacherByUserId = (userId) => {
   return db.query("select id from teachers WHERE user_id = ?", [userId]);
 };
 
@@ -182,7 +182,7 @@ module.exports = {
   getTeacher,
   validateTeacher,
   unvalidatedTeacher,
-  getIdTeacherByUsedId,
+  getIdTeacherByUserId,
   getCategoryById,
   getTeacherByEmail,
   getTeacherClassesByTeacherId,
