@@ -30,10 +30,15 @@ const getAvgReviewRatingByTeacher = (teacherId) => {
   );
 };
 
+const getReviewByStudentId = (studentId) => {
+  return db.query("select * from reviews r where student_id = ?", [studentId]);
+};
+
 module.exports = {
   getById,
   create,
   update,
   getReviewByTeacherAndStudent,
   getAvgReviewRatingByTeacher,
+  getReviewByStudentId,
 };

@@ -5,7 +5,9 @@ const {
   create,
   update,
   getReviewByTeacherAndStudent,
+  getReviewByStudentId,
 } = require("../../models/review.model");
+const { checkStudent } = require("../../utils/student.validator");
 
 router.get("/:reviewId", async (req, res) => {
   //res.json("Obteniendo un comentario by ID");
@@ -23,7 +25,7 @@ router.get("/:reviewId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkStudent, async (req, res) => {
   //res.json("creando un nuevo review");
   try {
     const [result] = await create(req.body);
@@ -49,6 +51,7 @@ router.put("/:reviewId", async (req, res) => {
   }
 });
 
+/* GET {{host}}/api/reviews?teacherid=1&studentid=1 */
 router.get("/", async (req, res) => {
   //res.json("Obteniedo una review by teacher & student ID");
   const { teacherid: teacherId, studentid: studentId } = req.query;
@@ -66,6 +69,23 @@ router.get("/", async (req, res) => {
     res.json(review[0]);
   } catch (error) {
     res.json({ fatal: error.message });
+  }
+});
+
+/** GET reviews by an student ID */
+router.get("/student/:studentId", async (req, res) => {
+  //res.json("Obteniendo las reviews de un estudiantes");
+  const { studentId } = req.params;
+  try {
+    const [review] = await getReviewByStudentId(studentId);
+    if (review.length === 0) {
+      return res.json({
+        message: "No existe la review con el ID del estudiante =  " + studentId,
+      });
+    }
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
   }
 });
 

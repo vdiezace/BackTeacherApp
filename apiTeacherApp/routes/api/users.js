@@ -15,7 +15,7 @@ const {
   checkEmail,
   newUserData,
 } = require("../../utils/user.validator");
-const { checkError } = require("../../utils/admin.validator");
+const { checkError } = require("../../utils/common.validator");
 
 /** GET all users including ther roles & descriptions */
 router.get("/", async (req, res) => {
@@ -113,7 +113,7 @@ router.delete("/:userId", checkUser, async (req, res) => {
 });
 
 /** UPDATE a user location  */
-router.put("/location/:userId", async (req, res) => {
+router.put("/location/:userId", checkUser, async (req, res) => {
   //res.json("Actualizando la localizacion");
   const { userId } = req.params;
   try {

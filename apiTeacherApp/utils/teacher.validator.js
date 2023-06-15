@@ -3,9 +3,8 @@ const { getTeacherById, getCategoryById } = require("../models/teacher.model");
 
 const newTeacherData = {
   username: {
-    exists: true,
+    exists: { errorMessage: "El campo de nombre de usuario es obligatorio" },
     trim: true,
-    errorMessage: "El campo de nombre de usuario es obligatorio",
   },
   password: {
     exists: {
@@ -38,7 +37,7 @@ const newTeacherData = {
   },
   role_id: {
     exists: {
-      errorMessage: "El campo de correo electrónico es obligatorio",
+      errorMessage: "El campo rol es obligatorio",
     },
     isInt: {
       errorMessage: "El rol debe ser un valor númerico",
@@ -158,9 +157,8 @@ const newTeacherData = {
 
 const updateTeacherData = {
   username: {
-    exists: true,
+    exists: { errorMessage: "El campo de nombre de usuario es obligatorio" },
     trim: true,
-    errorMessage: "El campo de nombre de usuario es obligatorio",
   },
   password: {
     exists: {
@@ -324,7 +322,7 @@ const checkTeacher = async (req, res, next) => {
     if (teacherId === undefined) {
       return res.status(400).json({
         error:
-          "Ocurrió un error al validar el identificador del profesor. El valor " +
+          "Ocurrió un error al validar el ID del profesor. El valor " +
           teacherId +
           " no existe",
       });
@@ -344,18 +342,12 @@ const checkTeacher = async (req, res, next) => {
     next();
   } catch (error) {
     return res.json({
-      error:
-        "No se pudo verificar el profesor con Id = " +
-        teacherId +
-        ". Error " +
-        error.errno +
-        ": " +
-        error.message,
+      error: "No se pudo verificar el profesor con Id = " + teacherId,
     });
   }
 };
 
-const checkBranch = async (req, res, next) => {
+const checkCategory = async (req, res, next) => {
   let categoryId;
 
   try {
@@ -369,18 +361,18 @@ const checkBranch = async (req, res, next) => {
     if (categoryId === undefined) {
       return res.status(400).json({
         error:
-          "Ocurrió un error al validar el identificador de la rama (branch). El valor " +
+          "Ocurrió un error al validar el identificador de la categoría (category). El valor " +
           categoryId +
           " no existe",
       });
     }
 
-    const branch = await getCategoryById(categoryId);
+    const category = await getCategoryById(categoryId);
 
-    if (!branch) {
+    if (!category) {
       return res.status(400).json({
         error:
-          "No existe la rama con Id = " +
+          "No existe la categoría con Id = " +
           categoryId +
           ". Debe darla de alta en la base de datos.",
       });
@@ -429,6 +421,6 @@ module.exports = {
   newTeacherData,
   updateTeacherData,
   checkTeacher,
-  checkBranch,
+  checkCategory,
   checkEmptyFields,
 };
