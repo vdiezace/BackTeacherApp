@@ -1,6 +1,6 @@
 @host=http://localhost:3000
 
-GET {{host}}/api/reviews/19
+GET {{host}}/api/reviews/45
 
 #####
 POST {{host}}/api/reviews
@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 #####
-GET {{host}}/api/reviews?teacherid=1&studentid=1
+GET {{host}}/api/reviews?teacherid=100&studentid=10
 
 #####
-GET {{host}}/api/reviews/student/3
+GET {{host}}/api/reviews/student/34

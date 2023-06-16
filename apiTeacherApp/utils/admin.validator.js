@@ -2,15 +2,20 @@ const { validationResult } = require("express-validator");
 const { getAdminById } = require("../models/admin.model");
 
 const newAdminData = {
-  name: {
+  first_name: {
     exists: true,
     trim: true,
     errorMessage: "El campo de nombre es obligatorio",
   },
-  surname: {
+  last_name: {
     exists: true,
     trim: true,
     errorMessage: "El campo de apellido es obligatorio",
+  },
+  username: {
+    exists: true,
+    trim: true,
+    errorMessage: "El campo de nombre de usuario es obligatorio",
   },
   email: {
     exists: {
@@ -41,15 +46,20 @@ const newAdminData = {
 };
 
 const updateAdminData = {
-  name: {
+  first_name: {
     exists: true,
     trim: true,
     errorMessage: "El campo de nombre es obligatorio",
   },
-  surname: {
+  last_name: {
     exists: true,
     trim: true,
     errorMessage: "El campo de apellido es obligatorio",
+  },
+  username: {
+    exists: true,
+    trim: true,
+    errorMessage: "El campo de nombre de usuario es obligatorio",
   },
   email: {
     exists: {

@@ -1,7 +1,6 @@
 const router = require("express").Router();
-const { checkToken } = require("../utils/middlewares");
 
-router.use("/admin", checkToken, require("./api/admin"));
+router.use("/admin", require("./api/admin"));
 router.use("/users", require("./api/users"));
 router.use("/students", require("./api/students"));
 router.use("/students-classes", require("./api/students-classes"));

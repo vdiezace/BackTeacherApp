@@ -79,7 +79,7 @@ router.get("/hours/:teacherId", async (req, res) => {
   const { teacherId } = req.params;
   try {
     const [teacherClassHours] = await getTeacherClassHours(teacherId);
-    if (teacher.length === 0) {
+    if (teacherClassHours.length === 0) {
       return res.json({
         fatal: "No existe el profesor con ID = " + teacherId,
       });
@@ -96,7 +96,7 @@ router.get("/filters/:filterId", async (req, res) => {
   const { filterId } = req.params;
   const arrFilter = [
     "order by price_hour asc, experience desc",
-    "order by category_id, price_hour asc, experience desc",
+    "order by categories_id, price_hour asc, experience desc",
     "order by teacher_id",
   ];
   try {
@@ -105,7 +105,7 @@ router.get("/filters/:filterId", async (req, res) => {
       return res.json({ fatal: "No existe el filtro " + filterId });
     }
     const [teacherFiltered] = await getTeacherByFilter(filter);
-    res.json(teacherFiltered[0]);
+    res.json(teacherFiltered);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }
@@ -206,7 +206,7 @@ router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
         error:
           "Se ha validado el profesor cuyo ID es " +
           teacherId +
-          "pero ha ocurrido un error al quitarlo de unsubscribe. Póngase en contacto con el administrador",
+          " pero ha ocurrido un error al quitarlo de unsubscribe. Póngase en contacto con el administrador",
       });
     }
     res.json(teacher[0]);

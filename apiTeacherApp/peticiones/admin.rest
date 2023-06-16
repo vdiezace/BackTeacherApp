@@ -2,11 +2,11 @@
 
 ####
 GET {{host}}/api/admin
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
+
 
 ####
 GET {{host}}/api/admin/131
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg3NTMwMDIxLCJpYXQiOjE2ODY5MjUyMjF9.k0PXaNlcrO_DUYSl5CLo9S4rHHaxJ5ojU-Q4v7R2Krg
 
 ####
 POST {{host}}/api/admin
@@ -14,8 +14,8 @@ Content-Type: application/json
 
 {
   "role_id": 1,
-  "username": "lfuentes",
-  "email": "lfuentes@gmail.com",
+  "username": "admin",
+  "email": "admin@gmail.com",
   "password": "12345678",
   "first_name": "Lucia",
   "last_name": "Fuentes"
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 #####
 DELETE {{host}}/api/admin/70
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMzEsInVzZXJfcm9sZSI6ImFkbWluIiwiZXhwIjoxNjg2OTMxNDU1LCJpYXQiOjE2ODYzMjY2NTV9.CLnIF88w3HYAXDV6sL9sKXuZbL6ggOw2JE36u-XkcSg
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxODc5LCJ1c2VyX3JvbGUiOiJhZG1pbiIsImV4cCI6MTY4NzQzMzgwMiwiaWF0IjoxNjg2ODI5MDAyfQ.BFwvQOQKi4OL5XrSd-tcmhpQVr-be307qKlAg6C2RPA
 
 
 #####

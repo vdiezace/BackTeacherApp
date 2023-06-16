@@ -3,7 +3,7 @@
 GET {{host}}/api/classes/1
 #####
 
-GET {{host}}/api/classes/teacher/teacher=4&date="2023-01-15"
+GET {{host}}/api/classes/teacher/teacher=112&date=2023-06-15
 
 #####
 POST {{host}}/api/classes

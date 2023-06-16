@@ -37,13 +37,13 @@ router.get("/teacher/teacher=:teacherId&date=:startDate", async (req, res) => {
     if (classInfo.length === 0) {
       return res.status(400).json({
         message:
-          "No existen las clases reservadas para el profesor con ID = " +
+          "No existen clases reservadas con el profesor cuyo ID = " +
           teacherId +
           " para la fecha " +
           startDate,
       });
     }
-    res.json(classInfo[0]);
+    res.json(classInfo);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }

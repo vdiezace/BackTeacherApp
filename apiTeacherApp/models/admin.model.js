@@ -48,7 +48,7 @@ const deleteAllAdmins = () => {
   );
 };
 const validateTeacherById = (teacherId, { is_approved }) => {
-  return db.query("update teachers set is_approved = ? WHERE user_id = ?", [
+  return db.query("update teachers set is_approved = ? WHERE users_id = ?", [
     is_approved,
     teacherId,
   ]);

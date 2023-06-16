@@ -55,7 +55,7 @@ const getAll = () => {
 
 const getById = (userId) => {
   return db.query(
-    "SELECT u.id AS user_id, DATE_FORMAT(subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, first_name, last_name, username, email, password, role_id, title, description FROM users AS u INNER JOIN role AS r ON r.id = u.role_id WHERE u.id = ?",
+    "SELECT u.id AS users_id, DATE_FORMAT(subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, first_name, last_name, username, email, password, role_id, title, description FROM users AS u INNER JOIN role AS r ON r.id = u.role_id WHERE u.id = ?",
     [userId]
   );
 };
@@ -99,7 +99,7 @@ const updateLocation = (userId, { role, latitude, longitude }) => {
   return db.query(
     "UPDATE users AS u INNER JOIN " +
       role +
-      "s AS r ON r.user_id = u.id INNER JOIN locations AS l ON l.id = r.locations_id SET latitude = ?, longitude = ? WHERE u.id = ?",
+      "s AS r ON r.users_id = u.id INNER JOIN locations AS l ON l.id = r.locations_id SET latitude = ?, longitude = ? WHERE u.id = ?",
     [latitude, longitude, userId]
   );
 };
