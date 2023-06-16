@@ -8,9 +8,9 @@ router.get("/:studentId", async (req, res) => {
   try {
     const [classStudentInfo] = await getClassesByStudentId(studentId);
     if (classStudentInfo.length === 0) {
-      return (
-        res.json("No existe la clase para el estudiante con ID = ") + studentId
-      );
+      return res.json({
+        message: "No existe la clase para el estudiante con ID = " + studentId,
+      });
     }
     res.json(classStudentInfo);
   } catch (error) {

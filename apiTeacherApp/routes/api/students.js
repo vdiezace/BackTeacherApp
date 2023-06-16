@@ -78,23 +78,23 @@ router.post(
     //res.json("Creando un nuevo estudiante");
     try {
       req.body.password = bcrypt.hashSync(req.body.password, 8);
+
+      /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
+      const [newUser] = await createUser(req.body);
+      req.body.users_id = newUser.insertId;
       /** Creamos una nueva localización */
-      const [resultLocation] = await createLocation(req.body);
+      const [newLocation] = await createLocation(req.body);
       //res.json(resultLocation);
       //res.json(req.body.locations_id);
       //res.json(resultLocation.insertId);
 
       /** Obtenemos el id y lo guardamos en locations_id */
-      req.body.locations_id = resultLocation.insertId;
-
-      /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
-      const [resultUser] = await createUser(req.body);
-      req.body.user_id = resultUser.insertId;
+      req.body.locations_id = newLocation.insertId;
 
       /** Creamos un nuevo estudiante y lo insertamos*/
       const [resultStudent] = await createStudent(req.body);
       const [newStudent] = await getStudentById(resultStudent.insertId);
-      res.json(newStudent[0]);
+      res.json(newStudent);
     } catch (error) {
       res.status(500).json({ fatal: error.message });
     }

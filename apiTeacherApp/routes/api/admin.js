@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
   //res.json("Obteniendo todos los administradores");
   try {
     const [admins] = await getAllAdmins();
-    res.json(admins[0]);
+    res.json(admins);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }

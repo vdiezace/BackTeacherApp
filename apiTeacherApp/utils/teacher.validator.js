@@ -137,7 +137,7 @@ const newTeacherData = {
     optional: true,
     trim: true,
   },
-  start_hour: {
+  start_class_hour: {
     exists: {
       errorMessage: "EL campo hora de inicio de las clases es obligatorio",
     },
@@ -145,7 +145,7 @@ const newTeacherData = {
       errorMessage: "El campo hora de inicio tiene que ser un número entero",
     },
   },
-  end_hour: {
+  end_class_hour: {
     exists: {
       errorMessage: "EL campo hora de fin de las clases es obligatorio",
     },
@@ -291,7 +291,7 @@ const updateTeacherData = {
     optional: true,
     trim: true,
   },
-  start_hour: {
+  start_class_hour: {
     exists: {
       errorMessage: "EL campo hora de inicio de las clases es obligatorio",
     },
@@ -299,7 +299,7 @@ const updateTeacherData = {
       errorMessage: "El campo hora de inicio tiene que ser un número entero",
     },
   },
-  end_hour: {
+  end_class_hour: {
     exists: {
       errorMessage: "EL campo hora de fin de las clases es obligatorio",
     },

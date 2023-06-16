@@ -1,16 +1,22 @@
 @host=http://localhost:3000
 ####
 GET {{host}}/api/teachers
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3JvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjg2OTMwODI2LCJpYXQiOjE2ODYzMjYwMjZ9.Zgp90plQn6rtZTWlaSuUs73XGhV_5L4U2aG4r5N4O1k
+Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTcsInVzZXJfcm9sZSI6InRlYWNoZXIiLCJleHAiOjE2ODc1MzAyMjUsImlhdCI6MTY4NjkyNTQyNX0.O3CUXmrOt4WHGZP0e9T7UaXq5oapr6y8Jxt-9Qt2R1s
 
 ###### /** GET a teacher by ID with avg_rating*/
-GET {{host}}/api/teachers/16
+GET {{host}}/api/teachers/109
 
 ###
-GET {{host}}/api/teachers/hours/1
+GET {{host}}/api/teachers/hours/107
 
-#####
+##### order by price_hour asc, experience desc
+GET {{host}}/api/teachers/filters/1
+
+##### order by categories_id, price_hour asc, experience desc
 GET {{host}}/api/teachers/filters/2
+
+#####order by teacher_id
+GET {{host}}/api/teachers/filters/3
 
 #####
 POST {{host}}/api/teachers
@@ -22,7 +28,7 @@ Content-Type: application/json
   "username": "fgarcia157",
   "email": "fgarcia157@gmail.com",
   "password": "12345678",
-  "role_id": 3,
+  "role_id": 2,
   "phone": "678234642",
   "avatar":"https://i.pravatar.cc/500?u=ernesto.alanizcorral@peticiones.online",
   "latitude": -34,
@@ -65,7 +71,7 @@ Content-Type: application/json
 }
 
 ####
-PUT {{host}}/api/teachers/validate/11
+PUT {{host}}/api/teachers/validate/117
 
 ####
 DELETE {{host}}/api/teachers/21
