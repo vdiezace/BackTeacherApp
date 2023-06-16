@@ -4,7 +4,7 @@
 GET {{host}}/users
 
 #####
-GET {{host}}/api/users/email/marcosmartin6@gmail.com
+GET {{host}}/users/marcosmartin6@gmail.com
 
 ###### API USERS ########
 GET {{host}}/api/users
