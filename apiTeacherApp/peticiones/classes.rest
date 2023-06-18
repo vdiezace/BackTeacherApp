@@ -16,3 +16,6 @@ Content-Type: application/json
     "teachers_id": 95,
     "students_id":7
 }
+
+######
+DELETE {{host}}/api/classes/20
