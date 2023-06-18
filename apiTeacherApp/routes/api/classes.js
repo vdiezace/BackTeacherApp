@@ -80,7 +80,7 @@ router.delete("/:classId",async (req, res)=> {
     await deleteClassById(classId);
     if (result.length === 0) {
       return res.json({
-        fatal: "No existe el usuario con cuyo ID es " + classId,
+        fatal: "No existe la clase con cuyo ID es " + classId,
       });
     }
   }catch(error){
