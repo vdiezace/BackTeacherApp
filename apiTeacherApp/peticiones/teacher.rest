@@ -1,7 +1,6 @@
 @host=http://localhost:3000
 ####
 GET {{host}}/api/teachers
-Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTcsInVzZXJfcm9sZSI6InRlYWNoZXIiLCJleHAiOjE2ODc1MzAyMjUsImlhdCI6MTY4NjkyNTQyNX0.O3CUXmrOt4WHGZP0e9T7UaXq5oapr6y8Jxt-9Qt2R1s
 
 ###### /** GET a teacher by ID with avg_rating*/
 GET {{host}}/api/teachers/109

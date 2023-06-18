@@ -17,6 +17,7 @@ const {
   unvalidatedTeacher,
   getTeacherById,
   getAllTeachers,
+  getTeachersByPage,
 } = require("../../models/teacher.model");
 const {
   createUser,
@@ -44,8 +45,14 @@ const {
 /** GET all teachers */
 router.get("/", async (req, res) => {
   //res.json("obteniendo todos los profesores");
+  let teachers;
   try {
-    const [teachers] = await getAllTeachers();
+    if(Object.keys(req.query).length !== 0 ){
+      const {page = 1, limit =10 } = req.query;
+      [teachers] = await getTeachersByPage(page, parseInt(limit))
+    } else {
+      [teachers] = await getAllTeachers()
+    }
     res.json(teachers);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
