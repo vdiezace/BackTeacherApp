@@ -41,7 +41,7 @@ const getActiveBookedClasses = (teacherId, date) => {
 };
 
 const deleteClassById = (classId) => {
-  return db.query("delete * from classes where id = ?", [classId]);
+  return db.query("delete from classes where id = ?", [classId]);
 }
 
 const getClassById = (classId) => {
