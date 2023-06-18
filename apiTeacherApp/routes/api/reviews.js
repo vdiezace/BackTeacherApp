@@ -25,7 +25,7 @@ router.get("/:reviewId", async (req, res) => {
   }
 });
 
-router.post("/", checkStudent, async (req, res) => {
+router.post("/", async (req, res) => {
   //res.json("creando un nuevo review");
   try {
     const [result] = await create(req.body);

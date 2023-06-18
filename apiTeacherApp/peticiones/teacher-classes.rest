@@ -1,3 +1,6 @@
 @host=http://localhost:3000
 
 GET {{host}}/api/teachers-classes/112
+
+#######
+GET {{host}}/api/teachers-classes/student/88

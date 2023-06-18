@@ -59,6 +59,8 @@ const sqlUpdateTeacherById =
   "UPDATE teachers SET users_id = ?, categories_id = ?, locations_id = ?, price_hour = ?, experience = ?," +
   "is_approved = ?, phone = ?, subject = ?, avatar = ?, start_class_hour = ?, end_class_hour = ? WHERE id = ?";
 
+const sqlTeacherClassesByStudentId = "SELECT * FROM teachers t INNER JOIN classes c ON c.teachers_id = t.id INNER JOIN students s ON s.id = c.students_id WHERE s.id =?;"
+
 // TODO: Hacer método con la paginación de los profes
 
 const getAllTeachers = () => {
@@ -172,6 +174,10 @@ const getTeacherClassesByTeacherId = (teacherId) => {
   return db.query(sqlTeacherClassesByTeacherId, [teacherId]);
 };
 
+const getTeacherClassesByStudentId = (studentId) => {
+  return db.query(sqlTeacherClassesByStudentId, [studentId]);
+}
+
 module.exports = {
   getAllTeachers,
   getTeacherById,
@@ -186,4 +192,5 @@ module.exports = {
   getCategoryById,
   getTeacherByEmail,
   getTeacherClassesByTeacherId,
+  getTeacherClassesByStudentId
 };
