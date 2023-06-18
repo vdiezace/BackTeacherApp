@@ -18,8 +18,8 @@ PUT {{host}}/api/reviews/32
 Content-Type: application/json
 
 {
-    "teacher_id":2, 
-    "student_id": 4, 
+    "teachers_id":2, 
+    "students_id": 4, 
     "rating": 3, 
     "comment": "Muy profesional, se nota que le gusta enseñar"
 }
