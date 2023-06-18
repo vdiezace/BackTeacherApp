@@ -314,19 +314,19 @@ const checkTeacher = async (req, res, next) => {
 
   try {
     //Recupero el id teacher en función del origen
-    teacherId =
-      Object.keys(req.params).length !== 0 && req.params.teacherId !== undefined
-        ? req.params.teacherId
-        : req.body.teacherId;
+    // teacherId =
+    //   Object.keys(req.params).length !== 0 && req.params.teacherId !== undefined
+    //     ? req.params.teacherId
+    //     : req.body.teachers_id;
 
-    if (teacherId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el ID del profesor. El valor " +
-          teacherId +
-          " no existe",
-      });
-    }
+    // if (teacherId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el ID del profesor. El valor " +
+    //       teachers_id +
+    //       " no existe",
+    //   });
+    // }
 
     const teacher = await getTeacherById(teacherId);
 
@@ -334,7 +334,7 @@ const checkTeacher = async (req, res, next) => {
       return res.status(400).json({
         error:
           "No existe el profesor con Id = " +
-          teacherId +
+          teachers_id +
           ". Debe darlo de alta en la base de datos.",
       });
     }
@@ -342,7 +342,7 @@ const checkTeacher = async (req, res, next) => {
     next();
   } catch (error) {
     return res.json({
-      error: "No se pudo verificar el profesor con Id = " + teacherId,
+      error: "No se pudo verificar el profesor con Id = " + teachers_id,
     });
   }
 };
@@ -352,20 +352,20 @@ const checkCategory = async (req, res, next) => {
 
   try {
     //Recupero el id branch en función del origen
-    categoryId =
-      Object.keys(req.params).length !== 0 &&
-      req.params.categoryId !== undefined
-        ? req.params.categoryId
-        : req.body.category_id;
+    // categoryId =
+    //   Object.keys(req.params).length !== 0 &&
+    //   req.params.categoryId !== undefined
+    //     ? req.params.categoryId
+    //     : req.body.category_id;
 
-    if (categoryId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el identificador de la categoría (category). El valor " +
-          categoryId +
-          " no existe",
-      });
-    }
+    // if (categoryId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el identificador de la categoría (category). El valor " +
+    //       categoryId +
+    //       " no existe",
+    //   });
+    // }
 
     const category = await getCategoryById(categoryId);
 

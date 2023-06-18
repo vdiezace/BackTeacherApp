@@ -220,23 +220,23 @@ const checkStudent = async (req, res, next) => {
 
   try {
     //Recupero el id teacher en función del origen
-    studentId =
-      Object.keys(req.params).length !== 0 && req.params.studentId !== undefined
-        ? req.params.studentId
-        : req.body.studentId;
+    // studentId =
+    //   Object.keys(req.params).length !== 0 && req.params.studentId !== undefined
+    //     ? req.params.studentId
+    //     : req.body.studentId;
 
-    if (studentId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el ID del estudiante. El valor " +
-          studentId +
-          " no existe",
-      });
-    }
+    // if (studentId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el ID del estudiante. El valor " +
+    //       studentId +
+    //       " no existe",
+    //   });
+    // }
 
-    const teacher = await getStudentById(studentId);
+    const student = await getStudentById(studentId);
 
-    if (!teacher) {
+    if (!student) {
       return res.status(400).json({
         error:
           "No existe el estudiante con Id = " +

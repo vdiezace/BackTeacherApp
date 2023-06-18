@@ -17,19 +17,19 @@ const checkUser = async (req, res, next) => {
 
   try {
     //Recupero el id user en función del origen
-    userId =
-      Object.keys(req.params).length !== 0 && req.params.userId !== undefined
-        ? req.params.userId
-        : req.body.user_id;
+    // userId =
+    //   Object.keys(req.params).length !== 0 && req.params.userId !== undefined
+    //     ? req.params.userId
+    //     : req.body.user_id;
 
-    if (userId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el identificador del usuario. El valor " +
-          userId +
-          " no existe",
-      });
-    }
+    // if (userId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el identificador del usuario. El valor " +
+    //       userId +
+    //       " no existe",
+    //   });
+    // }
 
     const user = await getUserById(userId);
 
@@ -54,20 +54,20 @@ const checkCity = async (req, res, next) => {
   let cityId;
 
   try {
-    //Recupero el id city en función del origen
-    cityId =
-      Object.keys(req.params).length !== 0 && req.params.cityId !== undefined
-        ? req.params.cityId
-        : req.body.city_id;
+    // //Recupero el id city en función del origen
+    // cityId =
+    //   Object.keys(req.params).length !== 0 && req.params.cityId !== undefined
+    //     ? req.params.cityId
+    //     : req.body.city_id;
 
-    if (cityId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el identificador de la ciudad. El valor " +
-          cityId +
-          " no existe",
-      });
-    }
+    // if (cityId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el identificador de la ciudad. El valor " +
+    //       cityId +
+    //       " no existe",
+    //   });
+    // }
 
     const city = await getCityById(cityId);
 
@@ -93,20 +93,20 @@ const checkLocation = async (req, res, next) => {
 
   try {
     //Recupero el id location en función del origen
-    locationId =
-      Object.keys(req.params).length !== 0 &&
-      req.params.locationId !== undefined
-        ? req.params.locationId
-        : req.body.location_id;
+    // locationId =
+    //   Object.keys(req.params).length !== 0 &&
+    //   req.params.locationId !== undefined
+    //     ? req.params.locationId
+    //     : req.body.location_id;
 
-    if (locationId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el identificador de la localización. El valor " +
-          locationId +
-          " no existe",
-      });
-    }
+    // if (locationId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el identificador de la localización. El valor " +
+    //       locationId +
+    //       " no existe",
+    //   });
+    // }
 
     const location = await getLocationById(locationId);
 
@@ -131,20 +131,20 @@ const checkRole = async (req, res, next) => {
   let roleId;
 
   try {
-    //Recupero el id location en función del origen
-    roleId =
-      Object.keys(req.params).length !== 0 && req.params.roleId !== undefined
-        ? req.params.roleId
-        : req.body.role_id;
+    // //Recupero el id location en función del origen
+    // roleId =
+    //   Object.keys(req.params).length !== 0 && req.params.roleId !== undefined
+    //     ? req.params.role_Id
+    //     : req.body.role_id;
 
-    if (roleId === undefined) {
-      return res.status(400).json({
-        error:
-          "Ocurrió un error al validar el identificador del rol. El valor " +
-          roleId +
-          " no existe",
-      });
-    }
+    // if (roleId === undefined) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Ocurrió un error al validar el identificador del rol. El valor " +
+    //       roleId +
+    //       " no existe",
+    //   });
+    // }
 
     const role = await getRoleById(roleId);
 

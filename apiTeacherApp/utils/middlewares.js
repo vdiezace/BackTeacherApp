@@ -15,7 +15,7 @@ const checkToken = async (req, res, next) => {
   try {
     // Verificar y decodificar el token utilizando la clave secreta
     obj = jwt.verify(token, process.env.SECRET_KEY);
-    req.data = obj;
+    //req.data = obj;
     //Recuperar los datos del usuario logado utilizando el modelo de usuario por su ID
     //const [users] = await getById(obj.user_id);
     //req.user = users[0]; // Asignar los datos del usuario al objeto `req` para su uso posterior en las rutas
