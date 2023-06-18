@@ -5,6 +5,8 @@ const {
   getBookedClasses,
   getActiveBookedClasses,
   createClass,
+  deleteClassById,
+  getClassById,
 } = require("../../models/class.model");
 const { newBookingData } = require("../../utils/class.validator");
 const { checkError } = require("../../utils/common.validator");
@@ -70,5 +72,20 @@ router.post(
     }
   }
 );
+
+router.delete("/:classId",async (req, res)=> {
+  const {classId} = req.params;
+  try{
+    const [result] = await getClassById(classId);
+    await deleteClassById(classId);
+    if (result.length === 0) {
+      return res.json({
+        fatal: "No existe el usuario con cuyo ID es " + classId,
+      });
+    }
+  }catch(error){
+    res.status(500).json({fatal: error.message})
+  }
+})
 
 module.exports = router;

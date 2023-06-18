@@ -40,9 +40,18 @@ const getActiveBookedClasses = (teacherId, date) => {
   return db.query(sqlActiveBookedClasses, [teacherId, date]);
 };
 
+const deleteClassById = (classId) => {
+  return db.query("select * from classes where id = ?", [classId]);
+}
+
+const getClassById = (classId) => {
+  return db.query("select * from classes where id = ?", [classId])
+}
 module.exports = {
   getClassesByStudentId,
   createClass,
   getBookedClasses,
   getActiveBookedClasses,
+  deleteClassById,
+  getClassById
 };

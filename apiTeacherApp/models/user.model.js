@@ -92,7 +92,7 @@ const update = (
 };
 
 const deleteById = (userId) => {
-  return db.query("DELETE FROM users WHERE id = ?", [userId]);
+  return db.query("DELETE * FROM users WHERE id = ?", [userId]);
 };
 
 const updateLocation = (userId, { role, latitude, longitude }) => {
