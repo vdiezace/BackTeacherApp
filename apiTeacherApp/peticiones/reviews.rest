@@ -29,3 +29,6 @@ GET {{host}}/api/reviews?teacherid=100&studentid=10
 
 #####
 GET {{host}}/api/reviews/student/34
+
+#####
+GET {{host}}/api/reviews/teacher/100
