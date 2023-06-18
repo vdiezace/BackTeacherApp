@@ -1,7 +1,7 @@
 /* QUERY para obtener una clase por el ID de un estudiante */
 const sqlClassesByStudentId =
   "SELECT c.id, u.first_name as teacher_name, u.last_name as teacher_surname, c.teachers_id, cat.title as category," +
-  "DATE_FORMAT(c.creation, '%d/%m/%Y %H:%i') as creation_date, DATE_FORMAT(c.start_date,'%d/%m/%Y) as start_date," +
+  "DATE_FORMAT(c.creation, '%d/%m/%Y %H:%i') as creation_date, DATE_FORMAT(c.start_date,'%d/%m/%Y') as start_date," +
   "c.start_hour, c.end_hour FROM classes as c JOIN teachers as t ON c.teachers_id = t.id JOIN students as s ON " +
   "c.students_id = s.id JOIN categories as cat ON t.categories_id = cat.id JOIN users as u ON t.users_id = u.id WHERE s.id = ?";
 
