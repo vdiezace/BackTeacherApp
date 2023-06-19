@@ -3,7 +3,6 @@ const { getTeacherClassesByTeacherId, getTeacherClassesByStudentId } = require("
 const router = require("express").Router();
 
 router.get("/:teacherId", async (req, res) => {
-  //res.json("obteniendo las clases de un profesor");
   const { teacherId } = req.params;
   try {
     const [teacherClassInfo] = await getTeacherClassesByTeacherId(teacherId);
