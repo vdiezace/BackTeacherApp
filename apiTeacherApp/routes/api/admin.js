@@ -24,7 +24,6 @@ const { checkError } = require("../../utils/common.validator");
 
 /** GET all admins */
 router.get("/", async (req, res) => {
-  //res.json("Obteniendo todos los administradores");
   try {
     const [admins] = await getAllAdmins();
     res.json(admins);
@@ -35,7 +34,6 @@ router.get("/", async (req, res) => {
 
 /** GET admin BY ID */
 router.get("/:adminId", checkAdmin, async (req, res) => {
-  //res.json("Obteniendo un admin por su id");
   const { adminId } = req.params;
   try {
     const [admin] = await getAdminById(adminId);
@@ -52,7 +50,6 @@ router.get("/:adminId", checkAdmin, async (req, res) => {
 
 /** CREATE an admin */
 router.post("/", checkSchema(newAdminData), checkError, async (req, res) => {
-  //res.json("Creando un nuevo admin");
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
     const [result] = await createAdmin(req.body);
@@ -83,7 +80,6 @@ router.put(
 );
 
 router.delete("/:adminId", checkAdmin, async (req, res) => {
-  //res.json("Eliminando un admin");
   const { adminId } = req.params;
   try {
     const [admin] = await getAdminById(adminId);
@@ -95,7 +91,6 @@ router.delete("/:adminId", checkAdmin, async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
-  //res.json("Eliminando todos los admins");
   try {
     await deleteAllAdmins();
     res.json({ message: "No hay usuarios administradores" });
@@ -106,7 +101,6 @@ router.delete("/", async (req, res) => {
 
 /** Validate a teacher */
 router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
-  //res.json("Validando un teacher por el admin");
   const { teacherId } = req.params;
   try {
     await validateTeacherById(teacherId, req.body);

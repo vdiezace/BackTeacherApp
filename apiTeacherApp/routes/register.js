@@ -7,7 +7,6 @@ const { createUser } = require("../models/user.model");
 const { createTeacher, getTeacherById } = require("../models/teacher.model");
 
 router.post("/student", async (req, res) => {
-  //res.json("Creando un nuevo registro");
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Creamos una nueva localización */
@@ -29,7 +28,6 @@ router.post("/student", async (req, res) => {
 });
 
 router.post("/teacher", async (req, res) => {
-  //res.json("Creando un nuevo registro");
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
     /** Creamos una nueva localización */

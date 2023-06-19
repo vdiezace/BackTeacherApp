@@ -3,7 +3,6 @@ const { getClassesByStudentId } = require("../../models/class.model");
 const router = require("express").Router();
 
 router.get("/:studentId", async (req, res) => {
-  //res.json("Obteniendo las clases del estudiante");
   const { studentId } = req.params;
   try {
     const [classStudentInfo] = await getClassesByStudentId(studentId);

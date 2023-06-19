@@ -15,7 +15,6 @@ const { checkStudent } = require("../../utils/student.validator");
 
 /*GET booked classes */
 router.get("/:classId", async (req, res) => {
-  //res.json("obteniendo los datos de una clase reservada");
   const { classId } = req.params;
   try {
     const [classInfo] = await getBookedClasses(classId);
@@ -32,7 +31,6 @@ router.get("/:classId", async (req, res) => {
 
 /** GET clases reservadas por ID teacher y por fecha */
 router.get("/teacher/teacher=:teacherId&date=:startDate", async (req, res) => {
-  //res.json("obteniendo clases por ID profesor y clase");
   const { teacherId, startDate } = req.params;
   try {
     const [classInfo] = await getActiveBookedClasses(teacherId, startDate);
@@ -59,7 +57,6 @@ router.post(
   checkTeacher,
   checkStudent,
   async (req, res) => {
-    //res.json("creando una nueva clase");
     try {
       /* Añadimos la hora a la que termina la clase */
       req.body.end_hour = parseInt(req.body.start_hour) + 1;

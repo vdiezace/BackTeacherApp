@@ -44,7 +44,6 @@ const {
 
 /** GET all teachers */
 router.get("/", async (req, res) => {
-  //res.json("obteniendo todos los profesores");
   let teachers;
   try {
     if(Object.keys(req.query).length !== 0 ){
@@ -61,7 +60,6 @@ router.get("/", async (req, res) => {
 
 /** GET a teacher by ID con la puntuacion media*/
 router.get("/:teacherId", async (req, res) => {
-  //res.json("Obteniendo un teacher by ID");
   const { teacherId } = req.params;
   try {
     const [teacher] = await getTeacherById(teacherId);
@@ -82,7 +80,6 @@ router.get("/:teacherId", async (req, res) => {
 
 /** GET teacher class hours */
 router.get("/hours/:teacherId", async (req, res) => {
-  //res.json("Devuelve las horas de un profesor");
   const { teacherId } = req.params;
   try {
     const [teacherClassHours] = await getTeacherClassHours(teacherId);
@@ -99,7 +96,6 @@ router.get("/hours/:teacherId", async (req, res) => {
 
 /** GET teachers by Filters */
 router.get("/filters/:filterId", async (req, res) => {
-  //res.json("Aplicando filtros a los profesores");
   const { filterId } = req.params;
   const arrFilter = [
     "order by price_hour asc, experience desc",
@@ -127,7 +123,6 @@ router.post(
   checkCity,
   checkEmptyFields,
   async (req, res) => {
-    //res.json("Creando un nuevo profesor");
     try {
       req.body.password = bcrypt.hashSync(req.body.password, 8);
       /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
@@ -161,7 +156,6 @@ router.put(
   checkCity,
   checkEmptyFields,
   async (req, res) => {
-    //res.json("Actualizando un profesor");
     const { teacherId } = req.params;
     try {
       req.body.password = bcrypt.hashSync(req.body.password, 8);
@@ -170,7 +164,6 @@ router.put(
 
       /** recogemos el id de la localizacion y del usuario */
       req.body.user_id = teacher[0].user_id;
-      //res.json(req.body.user_id);
       req.body.locations_id = teacher[0].locations_id;
 
       /** actualizados los IDs de localizacion y usuario */

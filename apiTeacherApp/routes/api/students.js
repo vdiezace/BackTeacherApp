@@ -40,7 +40,6 @@ const { checkToken, checkTokenRole } = require("../../utils/middlewares");
 
 /** GET All students */
 router.get("/", async (req, res) => {
-  //res.json("pasa por aqui");
   try {
     const [students] = await getAllStudents();
     res.json(students);
@@ -51,8 +50,6 @@ router.get("/", async (req, res) => {
 
 /** GET an students BY ID */
 router.get("/:studentId", checkStudent, async (req, res) => {
-  //res.json("Obtiendo un estudiante por su id");
-  //res.json(req.params);
   const { studentId } = req.params;
   try {
     const [student] = await getStudentById(studentId);
@@ -75,19 +72,15 @@ router.post(
   checkCity,
   checkEmptyFields,
   async (req, res) => {
-    //res.json("Creando un nuevo estudiante");
     try {
       req.body.password = bcrypt.hashSync(req.body.password, 8);
 
       /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
       const [newUser] = await createUser(req.body);
       req.body.users_id = newUser.insertId;
+
       /** Creamos una nueva localización */
       const [newLocation] = await createLocation(req.body);
-      //res.json(resultLocation);
-      //res.json(req.body.locations_id);
-      //res.json(resultLocation.insertId);
-
       /** Obtenemos el id y lo guardamos en locations_id */
       req.body.locations_id = newLocation.insertId;
 
@@ -113,18 +106,14 @@ router.put(
   checkCity,
   checkEmptyFields,
   async (req, res) => {
-    //res.json("actualizando un estudiante");
     const { studentId } = req.params;
     try {
       req.body.password = bcrypt.hashSync(req.body.password, 8);
       /** Obtenemos los datos del estudiante */
       const [student] = await getStudent(studentId);
-      //res.json(student);
-      //res.json(student[0].user_id);
 
       /** recogemos el id de la localizacion y del usuario */
       req.body.user_id = student[0].user_id;
-      //res.json(req.body.user_id);
       req.body.locations_id = student[0].locations_id;
 
       /** actualizados los IDs de localizacion y usuario */
@@ -152,8 +141,6 @@ router.delete(
     const { studentId } = req.params;
     try {
       const [student] = await getStudentById(studentId);
-      //res.json(student);
-      //res.json(student[0].unsubscribed_date);
       if (student[0].unsubscribed_date !== null) {
         return res.json({
           error:
@@ -166,7 +153,6 @@ router.delete(
       /** Fecha de baja */
       const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
       await deleteUser(student[0].user_id, unsubscribed_date);
-      //res.json(student[0].user_id);
 
       /** desactiva el estudiante */
       await deactiveStudent(student[0].user_id);
@@ -184,7 +170,6 @@ router.delete(
 
 /** GET active students */
 router.get("/status/active", async (req, res) => {
-  //res.json("obteniendo los estudiantes activos");
   try {
     const [students] = await getActiveStudent();
     res.json(students);
@@ -195,7 +180,6 @@ router.get("/status/active", async (req, res) => {
 
 /** GET deactive students */
 router.get("/status/deactive", async (req, res) => {
-  //res.json("obteniendo los estudiantes activos");
   try {
     const [students] = await getDeactiveStudent();
     res.json(students);
@@ -206,12 +190,10 @@ router.get("/status/deactive", async (req, res) => {
 
 /** Activating an student */
 router.put("/:studentId/active", checkStudent, async (req, res) => {
-  //res.json("Cambiando el estado de un estudiante");
   const { studentId } = req.params;
   try {
     /** Se activa el estudiante */
     const [studentActivated] = await activeStudent(studentId);
-    //res.json(studentActivated.affectedRows);
     if (studentActivated.affectedRows !== 1) {
       return res.json({
         error: "No se ha podido activar el estudiante cuyo ID es " + studentId,
@@ -220,11 +202,9 @@ router.put("/:studentId/active", checkStudent, async (req, res) => {
 
     /** recuperamos el estudiante */
     const [student] = await getStudentById(studentId);
-    //res.json(student[0].user_id);
 
     /** Se habilita en usuarios */
     const [user] = await deleteUser(student[0].user_id, null);
-    //res.json(user.affectedRows);
 
     if (user.affectedRows !== 1) {
       return res.json({
