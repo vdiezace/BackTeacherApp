@@ -7,7 +7,7 @@
 const sqlTeachersData =
   "select u.id as users_id, u.first_name, u.last_name, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.role_id," +
-  "t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title," +
+  "t.id, t.phone, t.categories_id, cat.title as category_title," +
   "cat.description as category_description, t.price_hour, t.experience, t.is_approved," +
   "t.locations_id, l.address, l.latitude, l.longitude, l.city_id, c.name as city, c.province_id," +
   "p.name as province, t.avatar, t.subject, t.start_class_hour, t.end_class_hour from users u, teachers t, categories cat, locations l, city c, province p where (u.id=t.users_id)" +
@@ -180,6 +180,8 @@ const getTeacherClassesByTeacherId = (teacherId) => {
 const getTeacherClassesByStudentId = (studentId) => {
   return db.query(sqlTeacherClassesByStudentId, [studentId]);
 }
+
+
 
 module.exports = {
   getAllTeachers,
