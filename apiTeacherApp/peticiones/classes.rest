@@ -18,4 +18,4 @@ Content-Type: application/json
 }
 
 ######
-DELETE {{host}}/api/classes/20
+DELETE {{host}}/api/classes/19

@@ -83,6 +83,7 @@ router.delete("/:classId",async (req, res)=> {
         fatal: "No existe la clase con cuyo ID es " + classId,
       });
     }
+    res.json(result[0]);
   }catch(error){
     res.status(500).json({fatal: error.message})
   }
