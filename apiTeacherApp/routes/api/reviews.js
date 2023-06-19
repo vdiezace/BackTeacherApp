@@ -5,10 +5,11 @@ const {
   create,
   update,
   getReviewByTeacherAndStudent,
+  getReviewByStudentId,
+  getReviewByTeacherId,
 } = require("../../models/review.model");
 
 router.get("/:reviewId", async (req, res) => {
-  //res.json("Obteniendo un comentario by ID");
   const { reviewId } = req.params;
   try {
     const [review] = await getById(reviewId);
@@ -24,7 +25,6 @@ router.get("/:reviewId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  //res.json("creando un nuevo review");
   try {
     const [result] = await create(req.body);
     const [review] = await getById(result.insertId);
@@ -35,7 +35,6 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:reviewId", async (req, res) => {
-  //res.json("editando una review");
   const { reviewId } = req.params;
   try {
     await update(reviewId, req.body);
@@ -49,8 +48,8 @@ router.put("/:reviewId", async (req, res) => {
   }
 });
 
+/* GET {{host}}/api/reviews?teacherid=1&studentid=1 */
 router.get("/", async (req, res) => {
-  //res.json("Obteniedo una review by teacher & student ID");
   const { teacherid: teacherId, studentid: studentId } = req.query;
   try {
     const [review] = await getReviewByTeacherAndStudent(teacherId, studentId);
@@ -66,6 +65,38 @@ router.get("/", async (req, res) => {
     res.json(review[0]);
   } catch (error) {
     res.json({ fatal: error.message });
+  }
+});
+
+/** GET reviews by an student ID */
+router.get("/student/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const [review] = await getReviewByStudentId(studentId);
+    if (review.length === 0) {
+      return res.json({
+        message: "No existe la review con el ID del estudiante =  " + studentId,
+      });
+    }
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+/** GET reviews by an student ID */
+router.get("/teacher/:teacherId", async (req, res) => {
+  const { teacherId } = req.params;
+  try {
+    const [review] = await getReviewByTeacherId(teacherId);
+    if (review.length === 0) {
+      return res.json({
+        message: "No existe la review con el ID del profesor =  " + teacherId,
+      });
+    }
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
   }
 });
 

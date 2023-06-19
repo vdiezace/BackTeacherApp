@@ -1,14 +1,14 @@
 @host=http://localhost:3000
 
-GET {{host}}/api/reviews/19
+GET {{host}}/api/reviews/45
 
 #####
 POST {{host}}/api/reviews
 Content-Type: application/json
 
 {
-    "teacher_id":2, 
-    "student_id": 3, 
+    "teachers_id":98, 
+    "students_id": 110, 
     "rating": 4, 
     "comment": "Muy profesional, se nota que le gusta enseñar"
 }
@@ -18,11 +18,17 @@ PUT {{host}}/api/reviews/32
 Content-Type: application/json
 
 {
-    "teacher_id":2, 
-    "student_id": 4, 
+    "teachers_id":2, 
+    "students_id": 4, 
     "rating": 3, 
     "comment": "Muy profesional, se nota que le gusta enseñar"
 }
 
 #####
-GET {{host}}/api/reviews?teacherid=1&studentid=1
+GET {{host}}/api/reviews?teacherid=100&studentid=10
+
+#####
+GET {{host}}/api/reviews/student/34
+
+#####
+GET {{host}}/api/reviews/teacher/100

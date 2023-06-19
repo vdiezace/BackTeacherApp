@@ -1,29 +1,57 @@
-const db = require('../db');
+/* QUERY para obtener una clase por el ID de un estudiante */
+const sqlClassesByStudentId =
+  "SELECT c.id, u.first_name as teacher_name, u.last_name as teacher_surname, c.teachers_id, cat.title as category," +
+  "DATE_FORMAT(c.creation, '%d/%m/%Y %H:%i') as creation_date, DATE_FORMAT(c.start_date,'%d/%m/%Y') as start_date," +
+  "c.start_hour, c.end_hour FROM classes as c JOIN teachers as t ON c.teachers_id = t.id JOIN students as s ON " +
+  "c.students_id = s.id JOIN categories as cat ON t.categories_id = cat.id JOIN users as u ON t.users_id = u.id WHERE s.id = ?";
 
-const getAll = () => {
-    return db.query('SELECT * FROM classes');
+/* QUERY para obtener las clases reservadas por id de la clase */
+const sqlBookedClasses =
+  "select id, DATE_FORMAT(creation, '%d/%m/%Y %H:%i') as creation_date, teachers_id, students_id, title," +
+  "start_hour, end_hour, DATE_FORMAT(start_date, '%d/%m/%Y %H:%i') as start_date, DATE_FORMAT(cancel_date, '%d/%m/%Y %H:%i') as cancel_date from classes where id = ?";
+
+/* QUERY para obtener las clases reservadas que están activadas por teacher y por fecha*/
+const sqlActiveBookedClasses =
+  "select id, DATE_FORMAT(creation, '%d/%m/%Y %H:%i') as creation_date, teachers_id, students_id, title," +
+  "start_hour, end_hour, DATE_FORMAT(start_date, '%d/%m/%Y %H:%i') as start_date, DATE_FORMAT(cancel_date,'%d/%m/%Y %H:%i') as cancel_date from classes where (cancel_date is null) and (teachers_id=?) and (start_date=?)";
+
+const getClassesByStudentId = (studentId) => {
+  return db.query(sqlClassesByStudentId, [studentId]);
 };
 
-const getById = (classId) => {
-    return db.query('SELECT * FROM classes WHERE id = ?', [classId]);
+const createClass = ({
+  start_hour,
+  end_hour,
+  start_date,
+  teachers_id,
+  students_id,
+}) => {
+  return db.query(
+    "insert into classes (start_hour, end_hour, start_date, teachers_id, students_id) values (?, ?, ?, ?, ?)",
+    [start_hour, end_hour, start_date, teachers_id, students_id]
+  );
 };
 
-const create = ({ teachers_id, students_id, creation, title, start_hour, end_hour, start_date, cancel_date }) => {
-    return db.query('INSERT INTO classes (teachers_id, students_id, creation, title, start_hour, end_hour, start_date, cancel_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [teachers_id, students_id, creation, title, start_hour, end_hour, start_date, cancel_date]);
+const getBookedClasses = (classId) => {
+  return db.query(sqlBookedClasses, [classId]);
 };
 
-const update = (classId, { teachers_id, students_id, creation, title, start_hour, end_hour, start_date, cancel_date }) => {
-    return db.query('UPDATE classes SET teachers_id = ?, students_id = ?, creation = ?, title = ?, start_hour = ?, end_hour = ?, start_date = ?, cancel_date = ? WHERE id = ?', [teachers_id, students_id, creation, title, start_hour, end_hour, start_date, cancel_date, classId]);
+const getActiveBookedClasses = (teacherId, date) => {
+  return db.query(sqlActiveBookedClasses, [teacherId, date]);
 };
 
-const deleteById = (classId) => {
-    return db.query('DELETE FROM classes WHERE id = ?', [classId]);
-};
+const deleteClassById = (classId) => {
+  return db.query("delete from classes where id = ?", [classId]);
+}
 
+const getClassById = (classId) => {
+  return db.query("select * from classes where id = ?", [classId])
+}
 module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    deleteById
+  getClassesByStudentId,
+  createClass,
+  getBookedClasses,
+  getActiveBookedClasses,
+  deleteClassById,
+  getClassById
 };

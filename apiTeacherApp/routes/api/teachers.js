@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const dayjs = require("dayjs");
+const bcrypt = require("bcryptjs");
+const { checkSchema } = require("express-validator");
 
 const {
   createLocation,
@@ -15,6 +17,7 @@ const {
   unvalidatedTeacher,
   getTeacherById,
   getAllTeachers,
+  getTeachersByPage,
 } = require("../../models/teacher.model");
 const {
   createUser,
@@ -22,13 +25,33 @@ const {
   deleteUser,
 } = require("../../models/user.model");
 const { getAvgReviewRatingByTeacher } = require("../../models/review.model");
-const bcrypt = require("bcryptjs");
+
+const {
+  newTeacherData,
+  checkEmptyFields,
+  checkTeacher,
+  updateTeacherData,
+  checkCategory,
+} = require("../../utils/teacher.validator");
+const { checkToken, checkTokenRole } = require("../../utils/middlewares");
+const {
+  checkError,
+  checkCity,
+  checkUser,
+  checkRole,
+  checkLocation,
+} = require("../../utils/common.validator");
 
 /** GET all teachers */
 router.get("/", async (req, res) => {
-  //res.json("obteniendo todos los profesores");
+  let teachers;
   try {
-    const [teachers] = await getAllTeachers();
+    if(Object.keys(req.query).length !== 0 ){
+      const {page = 1, limit =10 } = req.query;
+      [teachers] = await getTeachersByPage(page, parseInt(limit))
+    } else {
+      [teachers] = await getAllTeachers()
+    }
     res.json(teachers);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -37,7 +60,6 @@ router.get("/", async (req, res) => {
 
 /** GET a teacher by ID con la puntuacion media*/
 router.get("/:teacherId", async (req, res) => {
-  //res.json("Obteniendo un teacher by ID");
   const { teacherId } = req.params;
   try {
     const [teacher] = await getTeacherById(teacherId);
@@ -58,11 +80,10 @@ router.get("/:teacherId", async (req, res) => {
 
 /** GET teacher class hours */
 router.get("/hours/:teacherId", async (req, res) => {
-  //res.json("Devuelve las horas de un profesor");
   const { teacherId } = req.params;
   try {
     const [teacherClassHours] = await getTeacherClassHours(teacherId);
-    if (teacher.length === 0) {
+    if (teacherClassHours.length === 0) {
       return res.json({
         fatal: "No existe el profesor con ID = " + teacherId,
       });
@@ -75,11 +96,10 @@ router.get("/hours/:teacherId", async (req, res) => {
 
 /** GET teachers by Filters */
 router.get("/filters/:filterId", async (req, res) => {
-  //res.json("Aplicando filtros a los profesores");
   const { filterId } = req.params;
   const arrFilter = [
     "order by price_hour asc, experience desc",
-    "order by category_id, price_hour asc, experience desc",
+    "order by categories_id, price_hour asc, experience desc",
     "order by teacher_id",
   ];
   try {
@@ -88,62 +108,80 @@ router.get("/filters/:filterId", async (req, res) => {
       return res.json({ fatal: "No existe el filtro " + filterId });
     }
     const [teacherFiltered] = await getTeacherByFilter(filter);
-    res.json(teacherFiltered[0]);
+    res.json(teacherFiltered);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }
 });
 
 /** CREATE a new teacher */
-router.post("/", async (req, res) => {
-  //res.json("Creando un nuevo profesor");
-  try {
-    req.body.password = bcrypt.hashSync(req.body.password, 8);
-    /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
-    const [newUser] = await createUser(req.body);
-    req.body.user_id = newUser.insertId;
+router.post(
+  "/",
+  checkSchema(newTeacherData),
+  checkError,
+  checkCategory,
+  checkCity,
+  checkEmptyFields,
+  async (req, res) => {
+    try {
+      req.body.password = bcrypt.hashSync(req.body.password, 8);
+      /** Creamos un nuevo usuario, obtenemos su id y lo guardamos en user_id */
+      const [newUser] = await createUser(req.body);
+      req.body.user_id = newUser.insertId;
 
-    const [newLocation] = await createLocation(req.body);
-    req.body.locations_id = newLocation.insertId;
+      const [newLocation] = await createLocation(req.body);
+      req.body.locations_id = newLocation.insertId;
 
-    /** Creamos un nuevo estudiante y lo insertamos*/
-    const [resultTeacher] = await createTeacher(req.body);
-    const [newTeacher] = await getTeacherById(resultTeacher.insertId);
-    res.json(newTeacher[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+      /** Creamos un nuevo estudiante y lo insertamos*/
+      const [resultTeacher] = await createTeacher(req.body);
+      const [newTeacher] = await getTeacherById(resultTeacher.insertId);
+      res.json(newTeacher[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 /** UPDATE a teacher */
-router.put("/:teacherId", async (req, res) => {
-  //res.json("Actualizando un profesor");
-  const { teacherId } = req.params;
-  try {
-    req.body.password = bcrypt.hashSync(req.body.password, 8);
-    /** Obtenemos los datos del profe */
-    const [teacher] = await getTeacher(teacherId);
+router.put(
+  "/:teacherId",
+  checkToken,
+  checkTeacher,
+  checkSchema(updateTeacherData),
+  checkError,
+  checkUser,
+  checkRole,
+  checkCategory,
+  checkLocation,
+  checkCity,
+  checkEmptyFields,
+  async (req, res) => {
+    const { teacherId } = req.params;
+    try {
+      req.body.password = bcrypt.hashSync(req.body.password, 8);
+      /** Obtenemos los datos del profe */
+      const [teacher] = await getTeacher(teacherId);
 
-    /** recogemos el id de la localizacion y del usuario */
-    req.body.user_id = teacher[0].user_id;
-    //res.json(req.body.user_id);
-    req.body.locations_id = teacher[0].locations_id;
+      /** recogemos el id de la localizacion y del usuario */
+      req.body.user_id = teacher[0].user_id;
+      req.body.locations_id = teacher[0].locations_id;
 
-    /** actualizados los IDs de localizacion y usuario */
-    await updateLocation(teacher[0].locations_id, req.body);
-    await updateUser(teacher[0].user_id, req.body);
+      /** actualizados los IDs de localizacion y usuario */
+      await updateLocation(teacher[0].locations_id, req.body);
+      await updateUser(teacher[0].user_id, req.body);
 
-    /** actualizamos el profe */
-    await updateTeacher(teacher[0].id, req.body);
-    const [modifiedTeacher] = await getTeacherById(teacher[0].id);
-    res.json(modifiedTeacher[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+      /** actualizamos el profe */
+      await updateTeacher(teacher[0].id, req.body);
+      const [modifiedTeacher] = await getTeacherById(teacher[0].id);
+      res.json(modifiedTeacher[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
 /** UPDATE validate a teacher */
-router.put("/validate/:teacherId", async (req, res) => {
+router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
   //res.json("validando a un profe");
   const { teacherId } = req.params;
   try {
@@ -168,7 +206,7 @@ router.put("/validate/:teacherId", async (req, res) => {
         error:
           "Se ha validado el profesor cuyo ID es " +
           teacherId +
-          "pero ha ocurrido un error al quitarlo de unsubscribe. Póngase en contacto con el administrador",
+          " pero ha ocurrido un error al quitarlo de unsubscribe. Póngase en contacto con el administrador",
       });
     }
     res.json(teacher[0]);
@@ -180,34 +218,41 @@ router.put("/validate/:teacherId", async (req, res) => {
 });
 
 /** DELETE teacher by ID */
-router.delete("/:teacherId", async (req, res) => {
-  //res.json("Eliminando un profesor");
-  const { teacherId } = req.params;
-  try {
-    const [teacher] = await getTeacherById(teacherId);
+router.delete(
+  "/:teacherId",
+  checkToken,
+  checkTokenRole("admin"),
+  checkTeacher,
+  async (req, res) => {
+    //res.json("Eliminando un profesor");
+    const { teacherId } = req.params;
+    try {
+      const [teacher] = await getTeacherById(teacherId);
 
-    if (teacher[0].unsubscribed_date !== null) {
-      return res.json({
-        error:
-          "El profesor con ID = " +
-          teacherId +
-          " ha sido dado de baja el dia " +
-          dayjs(teacher[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+      if (teacher[0].unsubscribed_date !== null) {
+        return res.json({
+          error:
+            "El profesor con ID = " +
+            teacherId +
+            " ha sido dado de baja el dia " +
+            dayjs(teacher[0].unsubscribed_date).format("YYYY-MM-DD HH:mm:ss"),
+        });
+      }
+      /** Fecha de baja */
+      const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+      await deleteUser(teacher[0].user_id, unsubscribed_date);
+
+      /** Profesor dado de baja*/
+      await unvalidatedTeacher(teacher[0].user_id);
+      teacher[0].unsubscribed_date = unsubscribed_date;
+      res.json(teacher[0]);
+    } catch (error) {
+      res.status(500).json({
+        fatal:
+          "No se ha podido dar de baja al profesor cuyo ID es " + teacherId,
       });
     }
-    /** Fecha de baja */
-    const unsubscribed_date = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
-    await deleteUser(teacher[0].user_id, unsubscribed_date);
-
-    /** Profesor dado de baja*/
-    await unvalidatedTeacher(teacher[0].user_id);
-    teacher[0].unsubscribed_date = unsubscribed_date;
-    res.json(teacher[0]);
-  } catch (error) {
-    res.status(500).json({
-      fatal: "No se ha podido dar de baja al profesor cuyo ID es " + teacherId,
-    });
   }
-});
+);
 
 module.exports = router;

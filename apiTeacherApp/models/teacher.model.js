@@ -5,13 +5,13 @@
  * categoría: title, description
  */
 const sqlTeachersData =
-  "select u.id as user_id, u.first_name, u.last_name, u.email, u.password," +
+  "select u.id as users_id, u.first_name, u.last_name, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.role_id," +
-  "t.id as teacher_id, t.phone, t.category_id, cat.title as category_title," +
+  "t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title," +
   "cat.description as category_description, t.price_hour, t.experience, t.is_approved," +
   "t.locations_id, l.address, l.latitude, l.longitude, l.city_id, c.name as city, c.province_id," +
-  "p.name as province, t.avatar, t.subject, t.start_class_hour, t.end_class_hour from users u, teachers t, categories cat, locations l, city c, province p where (u.id=t.user_id)" +
-  "and (t.category_id=cat.id) and (t.locations_id=l.id) and (l.city_id=c.id) and (c.province_id=p.id) and (u.role_id=3)";
+  "p.name as province, t.avatar, t.subject, t.start_class_hour, t.end_class_hour from users u, teachers t, categories cat, locations l, city c, province p where (u.id=t.users_id)" +
+  "and (t.categories_id=cat.id) and (t.locations_id=l.id) and (l.city_id=c.id) and (c.province_id=p.id) and (u.role_id=2)";
 
 /** Query para obtener todos los profesores
  * incluyendo:
@@ -23,21 +23,21 @@ const sqlTeachersData =
 const sqlAllTeacherData =
   "select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date," +
-  "u.role_id, t.id as teacher_id, t.phone, t.category_id, cat.title as category_title, cat.description as category_description," +
+  "u.role_id, t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
   "t.price_hour, t.experience, t.is_approved, t.locations_id, l.address, l.latitude, l.longitude, l.city_id," +
   "c.name as city, c.province_id, p.name as province, t.avatar, t.subject, t.start_class_hour," +
   "t.end_class_hour, CAST(AVG(r.rating) AS DECIMAL(10,2)) as avg_rating from users u, teachers t," +
-  "categories cat, locations l, city c, province p, reviews r  where (u.id=t.user_id)" +
-  "and (t.category_id=cat.id) and (t.locations_id=l.id) and (l.city_id=c.id) and (c.province_id=p.id)" +
-  "and (u.role_id=3) and (t.id=r.teacher_id) group by teacher_id UNION select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
+  "categories cat, locations l, city c, province p, reviews r  where (u.id=t.users_id)" +
+  "and (t.categories_id=cat.id) and (t.locations_id=l.id) and (l.city_id=c.id) and (c.province_id=p.id)" +
+  "and (u.role_id=2) and (t.id=r.teachers_id) group by teacher_id UNION select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i'), DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i'), u.role_id," +
-  "t.id as teacher_id, t.phone, t.category_id, cat.title as category_title, cat.description as category_description," +
+  "t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
   "t.price_hour, t.experience,  t.is_approved, t.locations_id, l.address, l.latitude, l.longitude," +
   "l.city_id, c.name as city, c.province_id, p.name as province, t.avatar, t.subject, t.start_class_hour," +
   "t.end_class_hour, 0 as avg_rating from users u, teachers t, categories cat, locations l, city c," +
-  "province p where (u.id=t.user_id) and (t.category_id=cat.id) and (t.locations_id=l.id)" +
-  "and (l.city_id=c.id) and (c.province_id=p.id) and (u.role_id=3)" +
-  "and not exists (select distinct teacher_id from reviews where reviews.teacher_id = t.id)";
+  "province p where (u.id=t.users_id) and (t.categories_id=cat.id) and (t.locations_id=l.id)" +
+  "and (l.city_id=c.id) and (c.province_id=p.id) and (u.role_id=2)" +
+  "and not exists (select distinct teachers_id from reviews where reviews.teachers_id = t.id)";
 
 /* Query para obtener las clases de un profesor incluyendo: 
 datos del estudiante: first_name, last_name
@@ -46,20 +46,25 @@ clases: creation, title, start_date, start_hour, end_hour
 */
 const sqlTeacherClassesByTeacherId =
   "select c.id as class_id, c.students_id, u.first_name, u.last_name," +
-  "cat.title as category, c.creation as creation_date, c.title as subjects,c.start_date, c.start_hour," +
+  "cat.title as category, DATE_FORMAT(c.creation,'%d/%m/%Y %H:%i') as creation_date, c.title as subjects, DATE_FORMAT(c.start_date, '%d/%m/%Y %H:%i') as start_date, c.start_hour," +
   "c.end_hour from classes c, teachers t, students s, users u, categories cat where (c.cancel_date is null)" +
-  "and (c.teachers_id = t.id) and (c.students_id = s.id) and (t.category_id = cat.id) and (s.user_id = u.id)" +
+  "and (c.teachers_id = t.id) and (c.students_id = s.id) and (t.categories_id = cat.id) and (s.users_id = u.id)" +
   "and (t.id=?) order by c.start_date";
 
 const sqlCreateNewTeacher =
-  "INSERT INTO teachers (user_id, category_id, locations_id, price_hour, experience, is_approved," +
+  "INSERT INTO teachers (users_id, categories_id, locations_id, price_hour, experience, is_approved," +
   "phone, subject, avatar, start_class_hour, end_class_hour) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 const sqlUpdateTeacherById =
-  "UPDATE teachers SET user_id = ?, category_id = ?, locations_id = ?, price_hour = ?, experience = ?," +
+  "UPDATE teachers SET users_id = ?, categories_id = ?, locations_id = ?, price_hour = ?, experience = ?," +
   "is_approved = ?, phone = ?, subject = ?, avatar = ?, start_class_hour = ?, end_class_hour = ? WHERE id = ?";
 
+const sqlTeacherClassesByStudentId = "SELECT * FROM teachers t INNER JOIN classes c ON c.teachers_id = t.id INNER JOIN students s ON s.id = c.students_id WHERE s.id =?;"
+
 // TODO: Hacer método con la paginación de los profes
+const getTeachersByPage = (page, limit) => {
+  return executeQuery(sqlAllTeacherData + ' order by teachers_id' + ' limit ? offset ?', [limit, (page - 1) * limit]);
+}
 
 const getAllTeachers = () => {
   return db.query(sqlAllTeacherData + "order by teacher_id");
@@ -156,9 +161,25 @@ const unvalidatedTeacher = (teacherId) => {
   ]);
 };
 
-const getIdTeacherByUsedId = (userId) => {
-  return db.query("select id from teachers WHERE user_id = ?", [userId]);
+const getIdTeacherByUserId = (userId) => {
+  return db.query("select id from teachers WHERE users_id = ?", [userId]);
 };
+
+const getCategoryById = (categoryId) => {
+  return db.query("select * from categories where id=?", [categoryId]);
+};
+
+const getTeacherByEmail = (email) => {
+  return db.query(sqlTeachersData + "(u.email = ?)", [email]);
+};
+
+const getTeacherClassesByTeacherId = (teacherId) => {
+  return db.query(sqlTeacherClassesByTeacherId, [teacherId]);
+};
+
+const getTeacherClassesByStudentId = (studentId) => {
+  return db.query(sqlTeacherClassesByStudentId, [studentId]);
+}
 
 module.exports = {
   getAllTeachers,
@@ -170,5 +191,10 @@ module.exports = {
   getTeacher,
   validateTeacher,
   unvalidatedTeacher,
-  getIdTeacherByUsedId,
+  getIdTeacherByUserId,
+  getCategoryById,
+  getTeacherByEmail,
+  getTeacherClassesByTeacherId,
+  getTeacherClassesByStudentId,
+  getTeachersByPage
 };

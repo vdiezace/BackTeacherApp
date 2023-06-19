@@ -1,0 +1,21 @@
+@host=http://localhost:3000
+
+GET {{host}}/api/classes/1
+#####
+
+GET {{host}}/api/classes/teacher/teacher=112&date=2023-06-15
+
+#####
+POST {{host}}/api/classes
+Content-Type: application/json
+
+{
+    "start_hour": 6,
+    "end_hour": 8,
+    "start_date": "2023-01-15",
+    "teachers_id": 95,
+    "students_id":7
+}
+
+######
+DELETE {{host}}/api/classes/19

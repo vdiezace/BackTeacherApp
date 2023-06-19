@@ -10,7 +10,7 @@ GET {{host}}/locations/province
 GET {{host}}/locations/city
 
 #### GET cities by province
-GET {{host}}/locations/province/city/57
+GET {{host}}/locations/province/city/2
 
 #### CREATE new location
 POST {{host}}/locations

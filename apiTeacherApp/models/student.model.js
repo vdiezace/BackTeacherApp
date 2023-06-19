@@ -6,7 +6,7 @@ const sqlGetAllStudents =
   "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as user_id, u.first_name," +
   "u.last_name, u.username ,u.email, u.password, l.latitude, l.longitude, l.address, c.name as city," +
   "p.name as province, r.title as role FROM students as s JOIN users as u ON " +
-  "s.user_id = u.id JOIN locations as l ON s.locations_id = l.id JOIN city as c ON " +
+  "s.users_id = u.id JOIN locations as l ON s.locations_id = l.id JOIN city as c ON " +
   "l.city_id = c.id JOIN province as p ON c.province_id = p.id JOIN role as r ON u.role_id = r.id";
 
 /** QUERY por el que se obtiene toda la información de un único estudiante
@@ -16,7 +16,7 @@ const sqlGetStudentById =
   "SELECT s.id, s.is_active, s.phone, s.avatar, DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date," +
   "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as user_id, u.first_name, " +
   "u.last_name, u.username, u.email, u.password, l.latitude, l.longitude, l.address, c.name as city," +
-  "p.name as province, r.title as role FROM students as s JOIN users as u ON s.user_id = u.id JOIN locations as l ON " +
+  "p.name as province, r.title as role FROM students as s JOIN users as u ON s.users_id = u.id JOIN locations as l ON " +
   "s.locations_id = l.id JOIN city as c ON l.city_id = c.id JOIN province as p ON c.province_id = p.id JOIN role as r ON " +
   "u.role_id = r.id WHERE s.id = ?";
 
@@ -25,7 +25,7 @@ const sqlGetAllActiveStudents =
   "SELECT s.id, s.is_active, s.phone, s.avatar, DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date," +
   "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as user_id, u.first_name," +
   "u.last_name, u.username ,u.email, u.password, l.latitude, l.longitude, l.address, c.name as city," +
-  "p.name as province, r.title as role FROM students as s JOIN users as u ON s.user_id = u.id JOIN locations as l ON " +
+  "p.name as province, r.title as role FROM students as s JOIN users as u ON s.users_id = u.id JOIN locations as l ON " +
   "s.locations_id = l.id JOIN city as c ON l.city_id = c.id JOIN province as p ON c.province_id = p.id JOIN role as r ON " +
   "u.role_id = r.id WHERE s.is_active = 1";
 
@@ -34,7 +34,7 @@ const sqlGetAllDeactiveStudents =
   "SELECT s.id, s.is_active, s.phone, s.avatar, DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date," +
   "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as user_id, u.first_name," +
   "u.last_name, u.username ,u.email, u.password, l.latitude, l.longitude, l.address, c.name as city," +
-  "p.name as province, r.title as role FROM students as s JOIN users as u ON s.user_id = u.id JOIN locations as l ON " +
+  "p.name as province, r.title as role FROM students as s JOIN users as u ON s.users_id = u.id JOIN locations as l ON " +
   "s.locations_id = l.id JOIN city as c ON l.city_id = c.id JOIN province as p ON c.province_id = p.id JOIN role as r ON " +
   "u.role_id = r.id WHERE s.is_active = 0";
 
@@ -46,20 +46,20 @@ const getStudentById = (studentId) => {
   return db.query(sqlGetStudentById, [studentId]);
 };
 
-const createStudent = ({ user_id, locations_id, phone, avatar }) => {
+const createStudent = ({ users_id, locations_id, phone, avatar }) => {
   return db.query(
-    "INSERT INTO students (user_id, locations_id, phone, avatar) VALUES (?, ?, ?, ?)",
-    [user_id, locations_id, phone, avatar]
+    "INSERT INTO students (users_id, locations_id, phone, avatar) VALUES (?, ?, ?, ?)",
+    [users_id, locations_id, phone, avatar]
   );
 };
 
 const updateStudent = (
   studentId,
-  { user_id, locations_id, phone, avatar, is_active }
+  { users_id, locations_id, phone, avatar, is_active }
 ) => {
   return db.query(
-    "UPDATE students SET user_id = ?, locations_id = ?, phone = ?, avatar = ?, is_active = ? WHERE id = ?",
-    [user_id, locations_id, phone, avatar, is_active, studentId]
+    "UPDATE students SET users_id = ?, locations_id = ?, phone = ?, avatar = ?, is_active = ? WHERE id = ?",
+    [users_id, locations_id, phone, avatar, is_active, studentId]
   );
 };
 
@@ -89,7 +89,7 @@ const getDeactiveStudent = () => {
 
 /**** Student QUERY to use in other classes */
 const getIdStudentByUserId = (userId) => {
-  return db.query("select id from students where user_id = ?", [userId]);
+  return db.query("select id from students where users_id = ?", [userId]);
 };
 
 module.exports = {

@@ -1,36 +1,42 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
+const { checkSchema } = require("express-validator");
 
 const {
   getAllAdmins,
   createAdmin,
-  getAdmintById,
   updateAdmin,
   deleteAdminById,
   deleteAllAdmins,
+  getAdminById,
+  validateTeacherById,
 } = require("../../models/admin.model");
+
+const { getTeacherById } = require("../../models/teacher.model");
+
 const {
-  validateTeacher,
-  getTeacherById,
-} = require("../../models/teacher.model");
+  newAdminData,
+  checkAdmin,
+  updateAdminData,
+} = require("../../utils/admin.validator");
+const { checkTeacher } = require("../../utils/user.validator");
+const { checkError } = require("../../utils/common.validator");
 
 /** GET all admins */
 router.get("/", async (req, res) => {
-  //res.json("Obteniendo todos los administradores");
   try {
     const [admins] = await getAllAdmins();
-    res.json(admins[0]);
+    res.json(admins);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
   }
 });
 
 /** GET admin BY ID */
-router.get("/:adminId", async (req, res) => {
-  //res.json("Obteniendo un admin por su id");
+router.get("/:adminId", checkAdmin, async (req, res) => {
   const { adminId } = req.params;
   try {
-    const [admin] = await getById(adminId);
+    const [admin] = await getAdminById(adminId);
     if (admin.length === 0) {
       return res.json({
         fatal: "No existe el administrador con cuyo ID es " + adminId,
@@ -43,13 +49,12 @@ router.get("/:adminId", async (req, res) => {
 });
 
 /** CREATE an admin */
-router.post("/", async (req, res) => {
-  //res.json("Creando un nuevo admin");
+router.post("/", checkSchema(newAdminData), checkError, async (req, res) => {
   try {
     req.body.password = bcrypt.hashSync(req.body.password, 8);
     const [result] = await createAdmin(req.body);
     //res.json(result.insertId);
-    const [newAdmin] = await getAdmintById(result.insertId);
+    const [newAdmin] = await getAdminById(result.insertId);
     res.json(newAdmin[0]);
   } catch (error) {
     res.status(500).json({ fatal: error.message });
@@ -57,23 +62,27 @@ router.post("/", async (req, res) => {
 });
 
 /** UPDATE an admin */
-router.put("/:adminId", async (req, res) => {
-  //res.json("actualizando un admin");
-  const { adminId } = req.params;
-  try {
-    await updateAdmin(adminId, req.body);
-    const [admin] = await getAdmintById(adminId);
-    res.json(admin[0]);
-  } catch (error) {
-    res.status(500).json({ fatal: error.message });
+router.put(
+  "/:adminId",
+  checkAdmin,
+  checkSchema(updateAdminData),
+  async (req, res) => {
+    //res.json("actualizando un admin");
+    const { adminId } = req.params;
+    try {
+      await updateAdmin(adminId, req.body);
+      const [admin] = await getAdminById(adminId);
+      res.json(admin[0]);
+    } catch (error) {
+      res.status(500).json({ fatal: error.message });
+    }
   }
-});
+);
 
-router.delete("/:adminId", async (req, res) => {
-  //res.json("Eliminando un admin");
+router.delete("/:adminId", checkAdmin, async (req, res) => {
   const { adminId } = req.params;
   try {
-    const [admin] = await getAdmintById(adminId);
+    const [admin] = await getAdminById(adminId);
     await deleteAdminById(adminId);
     res.json(admin[0]);
   } catch (error) {
@@ -82,7 +91,6 @@ router.delete("/:adminId", async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
-  //res.json("Eliminando todos los admins");
   try {
     await deleteAllAdmins();
     res.json({ message: "No hay usuarios administradores" });
@@ -92,11 +100,10 @@ router.delete("/", async (req, res) => {
 });
 
 /** Validate a teacher */
-router.put("/validate/:teacherId", async (req, res) => {
-  //res.json("Validando un teacher por el admin");
+router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
   const { teacherId } = req.params;
   try {
-    await validateTeacher(teacherId, req.body);
+    await validateTeacherById(teacherId, req.body);
     const [teacher] = await getTeacherById(teacherId);
     if (teacher.length === 0) {
       return res.json({

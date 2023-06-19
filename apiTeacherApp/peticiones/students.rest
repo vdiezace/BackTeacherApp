@@ -4,7 +4,7 @@
 GET {{host}}/api/students
 
 ###
-GET {{host}}/api/students/13
+GET {{host}}/api/students/10
 
 ###
 POST {{host}}/api/students
@@ -13,16 +13,16 @@ Content-Type: application/json
 {
     "first_name": "Laura",
     "last_name": "Lopez",
-    "username":"lauri5",
-    "email": "lauri5@gmail.com",
-    "password": "lauri",
-    "role_id": 5,
+    "username":"lauri",
+    "email": "llopez5@gmail.com",
+    "password": "laurita12",
+    "role_id": 3,
     "phone": "123456783",
-    "avatar": "https://robohash.org/eveniettotamqui.png?size=50x50&set=set1",
-    "latitude": 41.6,
-    "longitude": -3.5,
-    "city_id": 16,
-    "address": "Avenida de los Francos 34"
+    "avatar": "https://i.pravatar.cc/500?u=raul.ibarraechevarria@peticiones.online",
+    "latitude": 28.1345456,
+    "longitude": -15.4342844,
+    "city_id": 27,
+    "address": "Av Mesa y Lopez 12"
 }
 
 ####
