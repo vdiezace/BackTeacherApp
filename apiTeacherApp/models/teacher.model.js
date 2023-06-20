@@ -71,7 +71,7 @@ const getAllTeachers = () => {
 };
 
 const getTeacherById = (teacherId) => {
-  return db.query(sqlTeachersData + " and (id = ?)", [teacherId]);
+  return db.query(sqlTeachersData + " and (t.id = ?)", [teacherId]);
 };
 
 const getTeacherByFilter = (filter) => {
