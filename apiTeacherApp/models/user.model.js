@@ -30,12 +30,12 @@ const createUser = ({
 };
 
 const updateUser = (
-  user_id,
+  userId,
   { first_name, last_name, username, email, password, role_id }
 ) => {
   return db.query(
     "UPDATE users SET role_id = ?, username = ?, email = ?, password = ?, first_name = ?, last_name = ? WHERE id = ?",
-    [role_id, username, email, password, first_name, last_name, user_id]
+    [role_id, username, email, password, first_name, last_name, userId]
   );
 };
 

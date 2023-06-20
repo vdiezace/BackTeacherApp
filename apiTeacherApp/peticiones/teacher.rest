@@ -70,7 +70,7 @@ Content-Type: application/json
 }
 
 ####
-PUT {{host}}/api/teachers/validate/117
+PUT {{host}}/api/teachers/validate/115
 
 ####
 DELETE {{host}}/api/teachers/21

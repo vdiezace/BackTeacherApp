@@ -7,7 +7,7 @@
 const sqlTeachersData =
   "select u.id as users_id, u.first_name, u.last_name, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.role_id," +
-  "t.id, t.phone, t.categories_id, cat.title as category_title," +
+  "t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title," +
   "cat.description as category_description, t.price_hour, t.experience, t.is_approved," +
   "t.locations_id, l.address, l.latitude, l.longitude, l.city_id, c.name as city, c.province_id," +
   "p.name as province, t.avatar, t.subject, t.start_class_hour, t.end_class_hour from users u, teachers t, categories cat, locations l, city c, province p where (u.id=t.users_id)" +
@@ -23,15 +23,15 @@ const sqlTeachersData =
 const sqlAllTeacherData =
   "select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date," +
-  "u.role_id, t.id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
+  "u.role_id, t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
   "t.price_hour, t.experience, t.is_approved, t.locations_id, l.address, l.latitude, l.longitude, l.city_id," +
   "c.name as city, c.province_id, p.name as province, t.avatar, t.subject, t.start_class_hour," +
   "t.end_class_hour, CAST(AVG(r.rating) AS DECIMAL(10,2)) as avg_rating from users u, teachers t," +
   "categories cat, locations l, city c, province p, reviews r  where (u.id=t.users_id)" +
   "and (t.categories_id=cat.id) and (t.locations_id=l.id) and (l.city_id=c.id) and (c.province_id=p.id)" +
-  "and (u.role_id=2) and (t.id=r.teachers_id) group by t.id UNION select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
+  "and (u.role_id=2) and (t.id=r.teachers_id) group by teacher_id UNION select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i'), DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i'), u.role_id," +
-  "t.id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
+  "t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
   "t.price_hour, t.experience,  t.is_approved, t.locations_id, l.address, l.latitude, l.longitude," +
   "l.city_id, c.name as city, c.province_id, p.name as province, t.avatar, t.subject, t.start_class_hour," +
   "t.end_class_hour, 0 as avg_rating from users u, teachers t, categories cat, locations l, city c," +
@@ -61,13 +61,16 @@ const sqlUpdateTeacherById =
 
 const sqlTeacherClassesByStudentId = "SELECT * FROM teachers t INNER JOIN classes c ON c.teachers_id = t.id INNER JOIN students s ON s.id = c.students_id WHERE s.id =?;"
 
+const sqlTeacherIdByUserId = "SELECT * FROM teachers AS t INNER JOIN users AS u ON t.users_id = u.id" +
+"INNER JOIN role AS r ON r.id = u.role_id WHERE r.title = teacher AND u.id = ?;"
+
 // TODO: Hacer método con la paginación de los profes
 const getTeachersByPage = (page, limit) => {
-  return executeQuery(sqlAllTeacherData + ' order by teachers_id' + ' limit ? offset ?', [limit, (page - 1) * limit]);
+  return executeQuery(sqlAllTeacherData + ' order by teacher_id' + ' limit ? offset ?', [limit, (page - 1) * limit]);
 }
 
 const getAllTeachers = () => {
-  return db.query(sqlAllTeacherData + "order by id");
+  return db.query(sqlAllTeacherData + "order by teacher_id");
 };
 
 const getTeacherById = (teacherId) => {
@@ -181,6 +184,10 @@ const getTeacherClassesByStudentId = (studentId) => {
   return db.query(sqlTeacherClassesByStudentId, [studentId]);
 }
 
+const getTeacherByUserId = (teacherId) =>{
+  return db.query(sqlTeacherIdByUserId, [teacherId])
+}
+
 module.exports = {
   getAllTeachers,
   getTeacherById,
@@ -196,5 +203,6 @@ module.exports = {
   getTeacherByEmail,
   getTeacherClassesByTeacherId,
   getTeacherClassesByStudentId,
-  getTeachersByPage
+  getTeachersByPage,
+  getTeacherByUserId
 };

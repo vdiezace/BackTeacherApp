@@ -111,14 +111,14 @@ router.put(
       req.body.password = bcrypt.hashSync(req.body.password, 8);
       /** Obtenemos los datos del estudiante */
       const [student] = await getStudent(studentId);
-
       /** recogemos el id de la localizacion y del usuario */
-      req.body.user_id = student[0].user_id;
+      //res.json(student)
+      req.body.users_id = student[0].users_id;
       req.body.locations_id = student[0].locations_id;
 
       /** actualizados los IDs de localizacion y usuario */
       await updateLocation(student[0].locations_id, req.body);
-      await updateUser(student[0].user_id, req.body);
+      await updateUser(student[0].users_id, req.body);
 
       /** actualizamos el estudiante */
       await updateStudent(student[0].id, req.body);

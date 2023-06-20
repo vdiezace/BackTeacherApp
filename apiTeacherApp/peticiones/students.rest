@@ -9,6 +9,7 @@ GET {{host}}/api/students/10
 ###
 POST {{host}}/api/students
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTIsInVzZXJfcm9sZSI6InN0dWRlbnQiLCJleHAiOjE2ODc5MDQ0MzcsImlhdCI6MTY4NzI5OTYzN30.soQFPDkPXzREnb7N6V35lJ1FYVrGRgbolmCSgmX9jZY
 
 {
     "first_name": "Laura",
@@ -28,6 +29,7 @@ Content-Type: application/json
 ####
 PUT {{host}}/api/students/19
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTIsInVzZXJfcm9sZSI6InN0dWRlbnQiLCJleHAiOjE2ODc5MDQ0MzcsImlhdCI6MTY4NzI5OTYzN30.soQFPDkPXzREnb7N6V35lJ1FYVrGRgbolmCSgmX9jZY
 
 {
     "first_name": "Carlos",
@@ -35,7 +37,7 @@ Content-Type: application/json
     "username":"carl33",
     "email": "carlol@gmail.com",
     "password": "carlol353",
-    "role_id": 5,
+    "role_id": 3,
     "phone": "123456783",
     "avatar": "https://i.pravatar.cc/500?u=mariadelcarmen.herreravillanueva@peticiones.online",
     "latitude": 41.6,

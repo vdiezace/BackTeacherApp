@@ -100,7 +100,7 @@ router.get("/filters/:filterId", async (req, res) => {
   const arrFilter = [
     "order by price_hour asc, experience desc",
     "order by categories_id, price_hour asc, experience desc",
-    "order by id",
+    "order by teacher_id",
   ];
   try {
     const filter = arrFilter[parseInt(filterId) - 1];
