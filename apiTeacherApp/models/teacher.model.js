@@ -29,7 +29,7 @@ const sqlAllTeacherData =
   "t.end_class_hour, CAST(AVG(r.rating) AS DECIMAL(10,2)) as avg_rating from users u, teachers t," +
   "categories cat, locations l, city c, province p, reviews r  where (u.id=t.users_id)" +
   "and (t.categories_id=cat.id) and (t.locations_id=l.id) and (l.city_id=c.id) and (c.province_id=p.id)" +
-  "and (u.role_id=2) and (t.id=r.teachers_id) group by teacher_id UNION select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
+  "and (u.role_id=2) and (t.id=r.teachers_id) group by t.id UNION select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i'), DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i'), u.role_id," +
   "t.id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
   "t.price_hour, t.experience,  t.is_approved, t.locations_id, l.address, l.latitude, l.longitude," +
@@ -67,11 +67,11 @@ const getTeachersByPage = (page, limit) => {
 }
 
 const getAllTeachers = () => {
-  return db.query(sqlAllTeacherData + "order by teacher_id");
+  return db.query(sqlAllTeacherData + "order by id");
 };
 
 const getTeacherById = (teacherId) => {
-  return db.query(sqlTeachersData + " and (t.id = ?)", [teacherId]);
+  return db.query(sqlTeachersData + " and (id = ?)", [teacherId]);
 };
 
 const getTeacherByFilter = (filter) => {
