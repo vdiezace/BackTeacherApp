@@ -21,7 +21,7 @@ const sqlTeachersData =
  * reviews
  */
 const sqlAllTeacherData =
-  "select u.id as users_id, u.first_name, u.last_name, u.username, u.email, u.password," +
+  "select u.id as user_id, u.first_name, u.last_name, u.username, u.email, u.password," +
   "DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date, DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date," +
   "u.role_id, t.id as teacher_id, t.phone, t.categories_id, cat.title as category_title, cat.description as category_description," +
   "t.price_hour, t.experience, t.is_approved, t.locations_id, l.address, l.latitude, l.longitude, l.city_id," +
