@@ -62,7 +62,7 @@ router.get("/", async (req, res) => {
           studentId,
       });
     }
-    res.json(review[0]);
+    res.json(review);
   } catch (error) {
     res.json({ fatal: error.message });
   }

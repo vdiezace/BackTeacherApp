@@ -27,7 +27,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTIsInVzZXJf
 }
 
 ####
-PUT {{host}}/api/students/19
+PUT {{host}}/api/students/112
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTIsInVzZXJfcm9sZSI6InN0dWRlbnQiLCJleHAiOjE2ODc5MDQ0MzcsImlhdCI6MTY4NzI5OTYzN30.soQFPDkPXzREnb7N6V35lJ1FYVrGRgbolmCSgmX9jZY
 
@@ -35,7 +35,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTIsInVzZXJf
     "first_name": "Carlos",
     "last_name": "Lopez",
     "username":"carl33",
-    "email": "carlol@gmail.com",
+    "email": "carlo5@gmail.com",
     "password": "carlol353",
     "role_id": 3,
     "phone": "123456783",

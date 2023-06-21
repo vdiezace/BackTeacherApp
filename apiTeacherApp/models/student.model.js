@@ -3,7 +3,7 @@
  * localizacion: latitud, longitud, provincia, ciudad y calle */
 const sqlGetAllStudents =
   "SELECT s.id, s.is_active, s.phone, s.avatar, DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date," +
-  "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as user_id, u.first_name," +
+  "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as users_id, u.first_name," +
   "u.last_name, u.username ,u.email, u.password, l.latitude, l.longitude, l.address, c.name as city," +
   "p.name as province, r.title as role FROM students as s JOIN users as u ON " +
   "s.users_id = u.id JOIN locations as l ON s.locations_id = l.id JOIN city as c ON " +
@@ -14,7 +14,7 @@ const sqlGetAllStudents =
  * localizacion: latitud, longitud, provincia, ciudad y calle */
 const sqlGetStudentById =
   "SELECT s.id, s.is_active, s.phone, s.avatar, DATE_FORMAT(u.subscribed, '%d/%m/%Y %H:%i') as subscribed_date," +
-  "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as user_id, u.first_name, " +
+  "DATE_FORMAT(u.unsubscribed, '%d/%m/%Y %H:%i') as unsubscribed_date, u.id as users_id, u.first_name, " +
   "u.last_name, u.username, u.email, u.password, l.latitude, l.longitude, l.address, c.name as city," +
   "p.name as province, r.title as role FROM students as s JOIN users as u ON s.users_id = u.id JOIN locations as l ON " +
   "s.locations_id = l.id JOIN city as c ON l.city_id = c.id JOIN province as p ON c.province_id = p.id JOIN role as r ON " +

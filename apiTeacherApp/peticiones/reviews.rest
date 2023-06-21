@@ -7,8 +7,8 @@ POST {{host}}/api/reviews
 Content-Type: application/json
 
 {
-    "teachers_id":98, 
-    "students_id": 110, 
+    "teachers_id":117, 
+    "students_id": 123, 
     "rating": 4, 
     "comment": "Muy profesional, se nota que le gusta enseñar"
 }

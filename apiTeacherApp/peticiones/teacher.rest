@@ -44,16 +44,17 @@ Content-Type: application/json
 }
 
 ####
-PUT {{host}}/api/teachers/11
+PUT {{host}}/api/teachers/132
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMTcsInVzZXJfcm9sZSI6InRlYWNoZXIiLCJleHAiOjE2ODc5NTM3MDcsImlhdCI6MTY4NzM0ODkwN30.jIW5S7RjMZEqEPPzC-ky_kREVVYukp2qXwp5TLi2vkg
 
 {
-  "first_name": "Lucia",
-  "last_name": "Delgado",
-  "username": "ldelgado9",
-  "email": "luciadelgado53@gmail.com",
+  "first_name": "Federico",
+  "last_name": "García",
+  "username": "fgarcia157",
+  "email": "fgarcia157@gmail.com",
   "password": "12345678",
-  "role_id": 3,
+  "role_id": 2,
  "phone": "123468025",
  "avatar":"https://i.pravatar.cc/500?u=mariadelcarmen.herreravillanueva@peticiones.online",
  "latitude": -34,

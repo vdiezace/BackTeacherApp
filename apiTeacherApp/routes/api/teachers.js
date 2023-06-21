@@ -163,12 +163,12 @@ router.put(
       const [teacher] = await getTeacher(teacherId);
 
       /** recogemos el id de la localizacion y del usuario */
-      req.body.user_id = teacher[0].user_id;
+      req.body.users_id = teacher[0].users_id;
       req.body.locations_id = teacher[0].locations_id;
 
       /** actualizados los IDs de localizacion y usuario */
       await updateLocation(teacher[0].locations_id, req.body);
-      await updateUser(teacher[0].user_id, req.body);
+      await updateUser(teacher[0].users_id, req.body);
 
       /** actualizamos el profe */
       await updateTeacher(teacher[0].id, req.body);
