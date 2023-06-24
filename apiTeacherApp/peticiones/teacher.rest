@@ -75,3 +75,6 @@ PUT {{host}}/api/teachers/validate/115
 
 ####
 DELETE {{host}}/api/teachers/21
+
+####
+GET {{host}}/api/teachers/status/deactive

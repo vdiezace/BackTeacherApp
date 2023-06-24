@@ -64,6 +64,12 @@ const sqlTeacherClassesByStudentId = "SELECT * FROM teachers t INNER JOIN classe
 const sqlTeacherIdByUserId = "SELECT * FROM teachers AS t INNER JOIN users AS u ON t.users_id = u.id" +
 "INNER JOIN role AS r ON r.id = u.role_id WHERE r.title = teacher AND u.id = ?;"
 
+const sqlDeactiveTeachers = "SELECT t.id, t.is_approved, t.phone, t.avatar, u.subscribed as subscribed_date," +
+"u.unsubscribed as unsubscribed_date, u.id as user_id, u.first_name, u.last_name, u.email, u.password, l.latitude," +
+"l.longitude, l.address, c.name as city, p.name as province, r.title as role FROM teachers as t JOIN users as u ON " +
+"t.users_id = u.id  JOIN locations as l ON t.locations_id = l.id JOIN city as c ON l.city_id = c.id JOIN province as p ON " +
+"c.province_id = p.id JOIN role as r ON u.role_id = r.id where is_approved = 0;"
+
 // TODO: Hacer método con la paginación de los profes
 const getTeachersByPage = (page, limit) => {
   return executeQuery(sqlAllTeacherData + ' order by teacher_id' + ' limit ? offset ?', [limit, (page - 1) * limit]);
@@ -188,6 +194,10 @@ const getTeacherByUserId = (teacherId) =>{
   return db.query(sqlTeacherIdByUserId, [teacherId])
 }
 
+const getDeactiveTeachers = () => {
+  return db.query(sqlDeactiveTeachers)
+}
+
 module.exports = {
   getAllTeachers,
   getTeacherById,
@@ -204,5 +214,6 @@ module.exports = {
   getTeacherClassesByTeacherId,
   getTeacherClassesByStudentId,
   getTeachersByPage,
-  getTeacherByUserId
+  getTeacherByUserId,
+  getDeactiveTeachers
 };

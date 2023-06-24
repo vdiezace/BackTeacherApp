@@ -18,6 +18,7 @@ const {
   getTeacherById,
   getAllTeachers,
   getTeachersByPage,
+  getDeactiveTeachers,
 } = require("../../models/teacher.model");
 const {
   createUser,
@@ -254,5 +255,14 @@ router.delete(
     }
   }
 );
+
+router.get("/status/deactive", async (req, res) => {
+  try{
+    const [teachers] = await getDeactiveTeachers();
+    res.json(teachers)
+  }catch(error){
+    res.status(500).json({fatal: error.message})
+  }
+})
 
 module.exports = router;
