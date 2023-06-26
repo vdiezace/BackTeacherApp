@@ -87,7 +87,7 @@ router.post(
       /** Creamos un nuevo estudiante y lo insertamos*/
       const [resultStudent] = await createStudent(req.body);
       const [newStudent] = await getStudentById(resultStudent.insertId);
-      res.json(newStudent);
+      res.json(newStudent[0]);
     } catch (error) {
       res.status(500).json({ fatal: error.message });
     }
