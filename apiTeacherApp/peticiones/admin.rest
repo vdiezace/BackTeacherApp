@@ -53,7 +53,7 @@ Content-Type: application/json
 }
 
 ####
-PUT {{host}}/api/admin/deactive/40
+PUT {{host}}/api/admin/deactive/19
 Content-Type: application/json
 
 {
