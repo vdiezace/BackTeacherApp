@@ -10,6 +10,7 @@ const {
   deleteAllAdmins,
   getAdminById,
   validateTeacherById,
+  deactiveStudentById,
 } = require("../../models/admin.model");
 
 const { getTeacherById } = require("../../models/teacher.model");
@@ -21,6 +22,8 @@ const {
 } = require("../../utils/admin.validator");
 const { checkTeacher } = require("../../utils/user.validator");
 const { checkError } = require("../../utils/common.validator");
+const { checkStudent } = require("../../utils/student.validator");
+const { getStudentById } = require("../../models/student.model");
 
 /** GET all admins */
 router.get("/", async (req, res) => {
@@ -113,6 +116,26 @@ router.put("/validate/:teacherId", checkTeacher, async (req, res) => {
     res.json({
       message:
         "Se ha cambiado el estado del profesor ha " + teacher[0].is_approved,
+    });
+  } catch (error) {
+    res.status(500).json({ fatal: error.message });
+  }
+});
+
+/** Deactive a student */
+router.put("/deactive/:studentId", checkStudent, async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    await deactiveStudentById(studentId, req.body);
+    const [student] = await getStudentById(studentId);
+    if (student.length === 0) {
+      return res.json({
+        fatal: "No existe el estudiante con el ID =" + studentId,
+      });
+    }
+    res.json({
+      message:
+        "Se ha cambiado el estado del estudiante ha " + student[0].is_active,
     });
   } catch (error) {
     res.status(500).json({ fatal: error.message });

@@ -51,8 +51,15 @@ const validateTeacherById = (teacherId, { is_approved }) => {
   return db.query("update teachers set is_approved = ? WHERE users_id = ?", [
     is_approved,
     teacherId,
-  ]);
+  ])
 };
+
+  const deactiveStudentById = (studentId, {is_active}) => {
+    return db.query("UPDATE students SET is_active = ? WHERE id = ?", [
+      is_active, studentId,
+    ]);
+  };
+
 module.exports = {
   getAllAdmins,
   getAdminById,
@@ -61,4 +68,5 @@ module.exports = {
   deleteAdminById,
   deleteAllAdmins,
   validateTeacherById,
+  deactiveStudentById
 };
